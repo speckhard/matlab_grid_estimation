@@ -5,7 +5,7 @@ function y = cycle_check_start(x,z,valid_pairs)
 
 list_of_connections_for_x = []; list_of_connections_for_z = [];
 
-for i = numel(valid_pairs(:,1))
+for i = 1:numel(valid_pairs(:,1))  %add one:numel
     if ismember(x, valid_pairs(i,:))
         % if x is a member of the row, append row number
         % to the list of connections

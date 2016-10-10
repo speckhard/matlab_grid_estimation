@@ -141,8 +141,8 @@ ccs = @cycle_check_start;
 cc = @cycle_check;
 
 for i = 2:numel(sorted_pairs_of_nodes)
-    start_flag = ccs(sorted_pairs_of_nodes(i,1),...
-        sorted_pairs_of_nodes(i,2), valid_pairs_of_nodes);
+    start_flag = 1% ccs(sorted_pairs_of_nodes(i,1),...
+        %sorted_pairs_of_nodes(i,2), valid_pairs_of_nodes);
     
     if cc(sorted_pairs_of_nodes(i,1),...
         sorted_pairs_of_nodes(i,2), start_flag, ...
@@ -165,9 +165,22 @@ end
 %% Graph the results    
     
 
-G = graph(valid_pairs_of_nodes(:,1),valid_pairs_of_nodes(:,2));
+G = graph(valid_pairs_of_nodes(:,1),valid_pairs_of_nodes(:,2),10);
 plot(G)
         
+%% calculate the successful dectection rate
+sdr_counter = 0 % this is our succesful detection counter
+for i = 1:max_number_of_connections
+    if (ismember(valid_pairs_of_nodes(i,:), mpc_base.branch(:,1:2),'rows'))
+        sdr_counter = sdr_counter +1;
+    elseif (ismember([valid_pairs_of_nodes(i,2),valid_pairs_of_nodes(i,1)], mpc_base.branch(:,1:2),'rows'))
+        sdr_counter = sdr_counter +1;
+    end
+    
+end
+
+sdr_counter
+
         
 
 

@@ -35,43 +35,59 @@ for i = 1:numel(valid_pairs(:,1));
     end
 end
 
+list_of_connections_for_start
+
 if isempty(list_of_connections_for_start)
     y = 0
-else
     
-for i = numel(list_of_connections_for_start)
-    if ismember(target_point, valid_pairs(list_of_connections_for_start(i),:))
-        y =  1; % cycle has been detected
-        disp('cycle_has_been_detected')
-        disp(valid_pairs(list_of_connections_for_start(i),:))
-        break
-    else
-        
-        %excluded_pairs = [excluded_pairs; ...
-            %valid_pairs(list_of_connections_for_start(i),:)];
-        if valid_pairs(list_of_connections_for_start(i),1) == start_point
-            
-            new_start_point = valid_pairs(list_of_connections_for_start(i),2);
-            
+else
+
+% if start_point == 66
+%     for i = numel(list_of_connections_for_start)
+%         disp(valid_pairs(list_of_connections_for_start(i),:))
+%     end
+% end
+
+    
+    for i = 1:numel(list_of_connections_for_start)
+    
+    
+        if ismember(target_point, valid_pairs(list_of_connections_for_start(i),:))
+            y =  1; % cycle has been detected
+            disp('before detection the start point is')            
+            start_point
+            disp('before detection the iteration number is')
+            i
+            disp('before detection the last connection to form a cycle is')
+            valid_pairs(list_of_connections_for_start(i),:)
+            disp('cycle_has_been_detected')
+            disp(valid_pairs(list_of_connections_for_start(i),:))
+            break
         else
-            new_start_point = valid_pairs(list_of_connections_for_start(i),1);
-        end
         
-        valid_pairs(list_of_connections_for_start(i),:) = []; % remove this connection
-        %since it has been checked
-        if cycle_check(new_start_point, target_point,0, valid_pairs, excluded_pairs) ~= 0
-            y = 1;
-            break;
-        end
-        
-        
+            %excluded_pairs = [excluded_pairs; ...
+            %valid_pairs(list_of_connections_for_start(i),:)];
+            if valid_pairs(list_of_connections_for_start(i),1) == start_point
             
+                new_start_point = valid_pairs(list_of_connections_for_start(i),2);
+            
+            else
+                new_start_point = valid_pairs(list_of_connections_for_start(i),1);
+            end
+            
+        
+            valid_pairs(list_of_connections_for_start(i),:) = [0,0]; % remove this connection
+            %since it has been checked
+            if cycle_check(new_start_point, target_point,0, valid_pairs, excluded_pairs) == 1
+                y = 1;
+                break;
+            end
         
         % TODO: I should pre-allocate space for excluded pairs to speed up
         % run-time
-    end
+        end
        y = 0;
-end
+    end
 end
 
     
