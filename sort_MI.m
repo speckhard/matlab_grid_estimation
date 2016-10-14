@@ -54,10 +54,10 @@ for i = 2:number_of_buses
     end
 end
 
-
+%disp('here')
 % now sort the sorted_mutual_information
 sorted_mutual_information = sort(unsorted_mutual_information,'descend');
-
+%disp('here2')
 % now create a matrix with the pairs of nodes corresponding to sorted
 % mutual information
 
@@ -66,7 +66,19 @@ sorted_MI_nodes = zeros(numel(sorted_mutual_information), 2);
 i = 1;
 while (i<= numel(sorted_mutual_information))
     
+    %TODO: if [r] = 0, throw an error and exit this function
+    
     [r]=find(unsorted_mutual_information== sorted_mutual_information(i));
+%     if i == 1
+%         r
+%     end
+    
+    if numel(r) == 0
+        i
+        sorted_mutual_information(i)
+        disp('couldnt find a match')
+    end
+    
     
     % Let's check if there are multiple mutual information values that
     % are the same. We treat this case below:
@@ -78,12 +90,12 @@ while (i<= numel(sorted_mutual_information))
     else 
         for k = 1:number_of_identical_mutual_information_vals
             %number_of_identical_mutual_information_vals
-           sorted_MI_nodes(i+k,:) = unsorted_MI_node_pairs(r(k),:);
-           
+           sorted_MI_nodes(i+k-1,:) = unsorted_MI_node_pairs(r(k),:);
+           i = i + 1;
         end
    % increment the iteration variable i by num of identical
    % mutual information vals so we can move on to the next mi val
-   i = i + number_of_identical_mutual_information_vals;
+        %i = i + number_of_identical_mutual_information_vals;
     end
 end
 
