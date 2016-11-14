@@ -1,6 +1,5 @@
 % This function sorts the mutual information values into a vector
-function sorted_MI_nodes = sort_MI(mutual_info_matrix)
-
+function sorted_MI_nodes_x = sort_MI_displays_sorting_with_branch(mutual_info_matrix)
 % INPUT: mutual_info_matrix which is size (number of buses, 
 % number of buses). The mutual info matrix is only non-zero for lower 
 % triangular values since mutual info is symmetric I(1,2) = I(2,1) and
@@ -61,29 +60,27 @@ sorted_mutual_information = sort(unsorted_mutual_information,'descend');
 % now create a matrix with the pairs of nodes corresponding to sorted
 % mutual information
 
-sorted_MI_nodes = zeros(numel(sorted_mutual_information), 2);
-
+sorted_MI_nodes_x = zeros(numel(sorted_mutual_information), 5);
+sorted_MI_nodes = sorted_MI_nodes_x(:,1:2); 
+sorted_MI_nodes_x(:,3) = sorted_mutual_information;
+unsorted_MI_node_pairs;
 i = 1;
 while (i<= numel(sorted_mutual_information))
     
     %TODO: if [r] = 0, throw an error and exit this function
     
-    [r]=find(unsorted_mutual_information== sorted_mutual_information(i));
-%     if i == 1
-%         r
-%     end
-    
+    [r]=find(unsorted_mutual_information == sorted_mutual_information(i));
+
     if numel(r) == 0
         i
         sorted_mutual_information(i)
         disp('couldnt find a match')
     end
     
-    
     % Let's check if there are multiple mutual information values that
     % are the same. We treat this case below:
     number_of_identical_mutual_information_vals = numel(r);
-    
+
     if number_of_identical_mutual_information_vals == 1
         sorted_MI_nodes(i,:) = unsorted_MI_node_pairs(r,:);
         i = i + 1;
@@ -91,11 +88,13 @@ while (i<= numel(sorted_mutual_information))
         for k = 1:number_of_identical_mutual_information_vals
             %number_of_identical_mutual_information_vals
            sorted_MI_nodes(i+k-1,:) = unsorted_MI_node_pairs(r(k),:);
-           i = i + 1;
+
         end
+    i = i + numel(r);
    % increment the iteration variable i by num of identical
    % mutual information vals so we can move on to the next mi val
         %i = i + number_of_identical_mutual_information_vals;
     end
 end
 
+sorted_MI_nodes_x(:,1:2) = sorted_MI_nodes; 
