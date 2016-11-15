@@ -1,5 +1,6 @@
 function sdr_percent = run_chow_liu_gaussian(Node_Volt_Matrix,...
-    true_branch_pairs, entropy_flag, graph_flag, MI_heatmap_flag, num_bits)
+    true_branch_pairs, entropy_flag, deriv_flag, graph_flag, ...
+    MI_heatmap_flag, num_bits)
 
 % This function takes in a matrix of voltage measurments, a list of true
 % branches and flag that determines if the data will be estimated as
@@ -17,6 +18,12 @@ if strcmp(num_bits,'no discretization') ~= 1
     num_bits, 'local','local');
 end
 
+if strcmp(deriv_flag, 'deriv')
+    %% Take the derivative of the data
+    disp('taking deriv of data')
+    take_derivative = @consider_derivative;
+    Node_Volt_Matrix = take_derivative(Node_Volt_Matrix);
+end
 % If the entropy_flag is the string gaussian in lower case, proceed to
 % model the data as guassian to find the MI.
 if strcmp(entropy_flag, 'gaussian')
