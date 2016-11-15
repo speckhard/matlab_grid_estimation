@@ -27,11 +27,11 @@ for i = 1:numel(percent_noise_vec);
     
     add_uniform_random_noise = @add_noise;
     node_volt_matrix_noise = add_uniform_random_noise(node_volt_matrix,...
-        'node_specific_min_max', percent_noise_vec(i));
+        'local_mean', percent_noise_vec(i));
 
-%Consider The Derivative Instead
-take_derivative = @consider_derivative;
-node_volt_matrix_noise_deriv = take_derivative(node_volt_matrix_noise);
+    %Consider The Derivative Instead
+    take_derivative = @consider_derivative;
+    node_volt_matrix_noise_deriv = take_derivative(node_volt_matrix_noise);
 
 %% Downsample  Data to 60 mins
 % downsampler = @downsample_v;
@@ -48,7 +48,7 @@ node_volt_matrix_noise_deriv = take_derivative(node_volt_matrix_noise);
     compute_sdr = @run_chow_liu_options;
     sdr_vec(i) = compute_sdr(node_volt_matrix_noise_deriv,...
         true_branch_data, ...
-        'gaussian','nograph','no heat_map','no discretization')
+        'gaussian','no deriv', 'nograph','no heat_map','no discretization')
 end
 
 
