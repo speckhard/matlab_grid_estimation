@@ -38,7 +38,7 @@ if strcmp(entropy_flag, 'gaussian')
     tic
     find_joint_entropy = @joint_entropy_vmag_only_fixed_neglog;
     joint_entropy_matrix = find_joint_entropy(Node_Volt_Matrix);
-    disp('time required to find joint entropy')
+    size(joint_entropy_matrix)
     toc
     %% Find the mutual information of pairs of different nodes, I(i,j).
     tic
