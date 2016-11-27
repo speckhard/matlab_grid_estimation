@@ -20,7 +20,7 @@ sig_dig_round = @sig_dig;
 sig_dig_vec = [1E-2, 1E-1, 1E0, 1E1, 1E2 ,1E3];
 sdr_mat = zeros(3, numel(sig_dig_vec));
 
-for i = 1:numel(delay_size_vec)
+for i = 1:numel(sig_dig_vec)
     node_volt_matrix_deriv = sig_dig_round(node_volt_matrix,...
         sig_dig_vec(i));
     for j = 1:3
