@@ -48,8 +48,8 @@ for k = 1:3
             
             %% Find the mutual information of data
             find_MI_mat = @find_vmag_MI;
-            mutual_information_mat = find_MI_mat(node_volt_mat_lens, 'gaussian', ...
-                'no discretization');
+            mutual_information_mat = find_MI_mat(node_volt_mat_lens, MI_method, ...
+                num_bits);
             %% Reflect MI
             reflect_MI_mat = @reflect_lower_triang_mat;
             mutual_information_mat = reflect_MI_mat(mutual_information_mat);
@@ -70,4 +70,5 @@ for k = 1:3
     end
 end
 
+save(‘leaf_node_SDR_allMI_11_30’,’sdr_mat’)
 
