@@ -17,7 +17,7 @@ if strcmp(num_bits,'no discretization') ~= 1
     disp(num_bits)
     %% Digitize the Input
     digitizer = @digitize_sig; % Import the digitizer
-    Node_Volt_Matrix = digitizer(Node_Volt_Matrix, ...
+    node_volt_matrix = digitizer(node_volt_matrix, ...
     num_bits, 'local','local');
 end
 if strcmp(entropy_flag, 'gaussian')
