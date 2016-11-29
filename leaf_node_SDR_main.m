@@ -23,36 +23,51 @@ take_derivative = @consider_derivative;
 node_volt_matrix = take_derivative(node_volt_matrix);
 %% Take a lens of data
 lens_size_vec = 24*60*[5 10 15 20 25 30 50 100 365];
-sdr_mat = zeros(2,numel(lens_size_vec));
+sdr_mat = zeros(2,numel(lens_size_vec),3);
 num_mins = numel(node_volt_matrix(:,1));
-for i = 1:numel(lens_size_vec)
-    num_of_lenses = floor(num_mins/lens_size_vec(i));
-    lens_size = lens_size_vec(i);
-    temp_sdr_vec = zeros(1, num_of_lenses);
-    for j = 1:num_of_lenses
-        node_volt_mat_lens = node_volt_matrix((j-1)*lens_size+1:...
-            j*lens_size,:);
+
+for k = 1:3
     
-        %% Find the mutual information of data
-        find_MI_mat = @find_vmag_MI;
-        mutual_information_mat = find_MI_mat(node_volt_mat_lens, 'gaussian', ...
-            'no discretization');
-        %% Reflect MI
-        reflect_MI_mat = @reflect_lower_triang_mat;
-        mutual_information_mat = reflect_MI_mat(mutual_information_mat);
-        
-        
-        %% Find leaf SDR
-        find_leafSDR = @leaf_node_SDR;
-        success_counter = find_leafSDR(mutual_information_mat, leaf_node_list,...
-            true_branch_data);
-        
-        percent_success = success_counter/numel(leaf_node_list)*100;
-        temp_sdr_vec(j) = percent_success;
+    if k == 1
+        num_bits = 'no discretization';
+        MI_method = 'gaussian';
+    elseif k ==2
+        num_bits = 14;
+        MI_method = 'JVHW';
+    elseif k == 3
+        num_bits = 14;
+        MI_method = 'discrete';
     end
-    mean_sdr = mean(temp_sdr_vec);
-    std_sdr = std(temp_sdr_vec);
-    sdr_mat(1,i) = mean_sdr;
-    sdr_mat(2,i) = std_sdr;
+    for i = 1:numel(lens_size_vec)
+        num_of_lenses = floor(num_mins/lens_size_vec(i));
+        lens_size = lens_size_vec(i);
+        temp_sdr_vec = zeros(1, num_of_lenses);
+        for j = 1:num_of_lenses
+            node_volt_mat_lens = node_volt_matrix((j-1)*lens_size+1:...
+                j*lens_size,:);
+            
+            %% Find the mutual information of data
+            find_MI_mat = @find_vmag_MI;
+            mutual_information_mat = find_MI_mat(node_volt_mat_lens, 'gaussian', ...
+                'no discretization');
+            %% Reflect MI
+            reflect_MI_mat = @reflect_lower_triang_mat;
+            mutual_information_mat = reflect_MI_mat(mutual_information_mat);
+            
+            
+            %% Find leaf SDR
+            find_leafSDR = @leaf_node_SDR;
+            success_counter = find_leafSDR(mutual_information_mat, leaf_node_list,...
+                true_branch_data);
+            
+            percent_success = success_counter/numel(leaf_node_list)*100;
+            temp_sdr_vec(j) = percent_success;
+        end
+        mean_sdr = mean(temp_sdr_vec);
+        std_sdr = std(temp_sdr_vec);
+        sdr_mat(1,i,k) = mean_sdr;
+        sdr_mat(2,i,k) = std_sdr;
+    end
 end
+
 
