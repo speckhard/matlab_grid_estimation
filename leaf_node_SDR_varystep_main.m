@@ -24,7 +24,7 @@ lens_size_vec = 24*60*[5 10 15 20 25 30 50 100 365];
 sdr_mat = zeros(2,numel(lens_size_vec),2,2);
 num_mins = numel(node_volt_matrix(:,1));
 
-delay_size_vec = [2,5,10];
+delay_size_vec = [1,2,5,10];
 for g = 1:numel(delay_size_vec)
     node_volt_matrix_deriv = vary_deriv_step(node_volt_matrix,...
         delay_size_vec(i));
