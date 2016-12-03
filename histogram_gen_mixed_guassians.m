@@ -3,18 +3,16 @@
 
 %% Setup data
 % SG2
-% First, copy the data minus the feeder bus
-node_volt_matrix = SG2datavolt15min(:,1:272);
-% Second, copy the list of true branches.
-true_branch_data = Truebranchlist;
+% % First, copy the data minus the feeder bus
+% node_volt_matrix = SG2datavolt15min(:,1:272);
+% % Second, copy the list of true branches.
+% true_branch_data = Truebranchlist;
 
 % % SG1
-% % Feeder node, in this case Node 53.
-% slack_bus = SGdatanodevolt(:,53);
-% % First, copy the data minus the slack bus
-% node_volt_matrix = SGdatanodevolt(:,1:52);
-% % Second, copy the list of true branches.
-% true_branch_data = SandiaNationalLabTrueBranchesData(1:51,:);
+% First, copy the data minus the slack bus
+node_volt_matrix = SGdatanodevolt(:,1:52);
+% Second, copy the list of true branches.
+%true_branch_data = SandiaNationalLabTrueBranchesData(1:51,:);
 
 % %% Remove redundant nodes from the dataset.
 % collapse_data = @collapse_redundant_data;
@@ -31,28 +29,38 @@ true_branch_data = Truebranchlist;
 
 %% Plot The 
 hold off
-b =120;
+b =18;
 h = histogram(node_volt_matrix(:,b),'Normalization', 'pdf');
 mu = mean(node_volt_matrix(:,b))
 sigma = std(node_volt_matrix(:,b))
-y = min(node_volt_matrix(:,b)):0.0001: ...
+y = min(node_volt_matrix(:,b)):1: ...
     max(node_volt_matrix(:,b));
 
 %% Find the Mixed Gaussian
+tic
 GMModel = fitgmdist(node_volt_matrix(:,b),2,...
     'Options',statset('Display','final'))
+toc
 %% mix gaussian plotting
 hold on
-mu1 = 7.5232E3
-mu2 = 7.4632E3
-sigma1 = sqrt(399.9124)
-sigma2 = sqrt(571.1325)
-f1 = 0.52*exp(-(y-mu1).^2./(2*sigma1^2))./(sigma1*sqrt(2*pi));
-f2 = 0.48*exp(-(y-mu2).^2./(2*sigma2^2))./(sigma2*sqrt(2*pi));
-plot(y,f1,y, f2,'LineWidth',2.5)
-title('Histogram/Mixed-Gaussian-Fit SG2-15min, Node 120')
+mu_vec = GMModel.mu;
+sigma_vec = squeeze(GMModel.Sigma);
+mu1 = mu_vec(1); %7.5232E3
+mu2 = mu_vec(2); %7.4632E3
+sigma1 = sigma_vec(1); %sqrt(399.9124)
+sigma2 = sigma_vec(2); %sqrt(571.1325)
+f1 = 0.52*exp(-(y-mu1).^2./(2*sigma1))./(sqrt(sigma1)*sqrt(2*pi));
+f2 = 0.48*exp(-(y-mu2).^2./(2*sigma2))./(sqrt(sigma2)*sqrt(2*pi));
+plot(y,f1+f2,'LineWidth',3.5)
+plot(y,f1,'g-.','LineWidth',3.5)
+plot(y,f2,'y.','LineWidth',2.5)
+title('Histogram/Mixed-Gaussian-Fit SGdatanodevolt, Node 12')
 xlabel('Voltage Magnitude (V)')
 ylabel('Probability Density')
-legend('pdf hist','RHS Mixed Gaussian Approx (0.52%)',...
-    'LHS Mixed Gaussian Approx (0.48%)')
+legend('Histogram', 'Gaussian Mixture Approximation', ...
+    'LHS Gaussian Approx', 'RHS Gaussian Approx')
+%legend('pdf hist','RHS Mixed Gaussian Approx (0.52%)',...
+   % 'LHS Mixed Gaussian Approx (0.48%)')
+   
+   
 
