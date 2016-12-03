@@ -20,15 +20,15 @@ find_leafs = @find_leaf_nodes;
 leaf_node_list = find_leafs(true_branch_data);
 
 %% Take a lens of data
-lens_size_vec = 24*60*[5 10 15 20 25 30 50 100 365];
+lens_size_vec = 24*60*[364];
 sdr_mat = zeros(2,numel(lens_size_vec),2,2);
 
 
-delay_size_vec = [1,2,5,10];
+delay_size_vec = [2,5,10];
 for g = 1:numel(delay_size_vec)
-    node_volt_matrix_deriv = vary_deriv_step(node_volt_matrix,...
+    node_volt_matrix_deriv = var_deriv(node_volt_matrix,...
         delay_size_vec(g));
-    for k = 1:2
+    for k = 1:1
         
         if k == 1
             num_bits = 'no discretization';
@@ -42,8 +42,8 @@ for g = 1:numel(delay_size_vec)
         end
         for i = 1:numel(lens_size_vec)
             num_mins = numel(node_volt_matrix_deriv(:,1));
-            num_of_lenses = floor(num_mins/lens_size_vec(i));
-            lens_size = lens_size_vec(i);
+            num_of_lenses = floor(num_mins/lens_size_vec(i))
+            lens_size = lens_size_vec(i)
             temp_sdr_vec = zeros(1, num_of_lenses);
             for j = 1:num_of_lenses
                 node_volt_mat_lens = node_volt_matrix_deriv((j-1)*lens_size+1:...
@@ -68,8 +68,8 @@ for g = 1:numel(delay_size_vec)
             end
             mean_sdr = mean(temp_sdr_vec);
             std_sdr = std(temp_sdr_vec);
-            sdr_mat(1,i,k,g) = mean_sdr;
-            sdr_mat(2,i,k,g) = std_sdr;
+            sdr_mat(1,i,g) = mean_sdr;
+            sdr_mat(2,i,g) = std_sdr;
         end
     end
 end
