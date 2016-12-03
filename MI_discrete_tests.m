@@ -1,9 +1,9 @@
 %% First, copy all of the Sandia data into a new matrix, avoid copying the
 data_limits = 'W10..BW8770';
-M = csvread('/Users/Dboy/Downloads/SG_data_solar_60min.csv',...
+node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_solar_60min.csv',...
    9,22, data_limits);
 %% Second, copy the list of true branches.
-true_branch_data = R4_truebranchlist;
+true_branch_data = [1 2];%R4_truebranchlist;
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -19,11 +19,21 @@ MI_vector = [string('gaussian'),string('JVHW'), string('discrete')];
 num_bits_vector = [12 14] %,6,8,10,12];
 sdr_mat = zeros(numel(num_bits_vector),numel(MI_vector));
 for j = 1:numel(num_bits_vector);
-    for i = 1:numel(MI_vector)
+    for i = 1:3
+        num_bits = num_bits_vector(j);
+        if i == 1
+            MI_vector = 'gaussian';
+            %num_bits = 'no discretization';
+        elseif i == 2
+            MI_vector = 'JVHW';
+        else i ==3
+            MI_vector = 'discrete';
+        end
+        
         %% Run Chow-Liu 
         compute_sdr = @run_chow_liu_options;
         sdr = compute_sdr(node_volt_matrix,true_branch_data, ...
-            MI_vector(i),'no_deriv','nograph','no heat_map', num_bits_vector(j))
+            MI_vector,'no_deriv','nograph','no heat_map', num_bits)
         sdr_mat(j,i) = sdr;
     end
 end
