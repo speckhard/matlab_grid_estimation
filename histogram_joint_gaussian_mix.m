@@ -24,7 +24,7 @@ title('Contour plot of P(Vmag(Node 9), Vmag(Node12)) for 100x100 bin matrix')
 %% Plot the k = 4 gaussian mix of the data
 
 joint_data = [node_volt_matrix(:,node1), node_volt_matrix(:,node2)];
-GMModel = fitgmdist(joint_data,4);
+GMModel = fitgmdist(joint_data,3);
 dimension_1 = min(node_volt_matrix(:,node1)):1: ...
     max(node_volt_matrix(:,node1));
 dimension_2 = min(node_volt_matrix(:,node2)):1: ...
