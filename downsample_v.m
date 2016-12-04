@@ -51,6 +51,16 @@ if (strcmp(avg_option_flag,'last')) || (time_interval_in_mins == 1 )
         node_volt_matrix_input(partition_counter*...
         time_interval_in_mins,:);
     end
+elseif strcmp(avg_option_flag, 'first')
+    disp('taking first value in each downsampling window')
+        for partition_counter = 1:num_down_samples
+        % Set the first sample of the output voltage matrix equal to the
+        % last measurement in the interval ->
+        % V(partition_counter*time_interval_in_mins).
+        node_volt_matrix_output(partition_counter,:) = ...
+        node_volt_matrix_input((partition_counter-1)*...
+        time_interval_in_mins+1,:);
+    end
 elseif strcmp(avg_option_flag,'mean')
     disp('taking mean')
     for partition_counter = 1:num_down_samples    
