@@ -6,6 +6,7 @@ node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt.csv',...
    9,22, data_limits);
 %% Second, copy the list of true branches.
 true_branch_data = SandiaNationalLabTrueNodeData;
+node_volt_matrix = node_volt_matrix(:,1:52);
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
