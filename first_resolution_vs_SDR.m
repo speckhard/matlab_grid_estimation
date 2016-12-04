@@ -35,7 +35,6 @@ for j = 1:numel(time_resolution_vec);
             MI_vector = 'discrete';
             num_bits = 14;
         end
-        
         %% Run Chow-Liu 
         compute_sdr = @run_chow_liu_options;
         sdr = compute_sdr(node_volt_matrix_downsampled_deriv,...
