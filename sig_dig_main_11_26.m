@@ -1,7 +1,7 @@
 % First, copy the data minus the feeder bus
-node_volt_matrix = SGdatasolar60min(:,1:52);
+node_volt_matrix = SGdatanodevolt(:,1:52);
 % Second, copy the list of true branches.
-true_branch_data = SandiaNationalLabTrueBranchesData(1:51,:);
+true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
 
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
@@ -11,17 +11,13 @@ collapse_data = @collapse_redundant_data;
 remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data); 
 
-%% Consider The Derivative Instead
-take_derivative = @consider_derivative;
-node_volt_matrix = take_derivative(node_volt_matrix);
-
 %% Consider Sig Dig
 sig_dig_round = @sig_dig;
-sig_dig_vec = [1E-2, 1E-1, 1E0, 1E1, 1E2 ,1E3];
+sig_dig_vec = [1E1, 0.5E2, 1E2 , 0.5E3];
 sdr_mat = zeros(3, numel(sig_dig_vec));
 
 for i = 1:numel(sig_dig_vec)
-    node_volt_matrix_deriv = sig_dig_round(node_volt_matrix,...
+    node_volt_matrix_sig = sig_dig_round(node_volt_matrix,...
         sig_dig_vec(i));
     for j = 1:3
         if j == 1
@@ -34,12 +30,16 @@ for i = 1:numel(sig_dig_vec)
             num_bits = 14;
             MI_method = 'discrete';
         end
+        %% Consider The Derivative Instead
+        take_derivative = @consider_derivative;
+        node_volt_matrix_sig_deriv = take_derivative(node_volt_matrix_sig);
+        
         compute_sdr = @run_chow_liu_options;
-        sdr = compute_sdr(node_volt_matrix_deriv,true_branch_data, ...
+        sdr = compute_sdr(node_volt_matrix_sig_deriv,true_branch_data, ...
             MI_method,'no_deriv','nograph','no heat_map',...
             num_bits)
         sdr_mat(j,i) = sdr;
     end
 end
 
-save('sdr_sig_dig_deriv_SGnosolar_main_11_26','sdr_mat')
+save('sdr_sig_dig_deriv_SGnosolar_main_12_3','sdr_mat')
