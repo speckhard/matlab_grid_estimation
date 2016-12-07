@@ -2,11 +2,13 @@
 % and off. 
 
 %% First, copy all of the Sandia data into a new matrix, avoid copying the
-data_limits = 'W10..BW8770';
-node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_solar_60min.csv',...
+data_limits = 'W10..KI35050';
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_60min.csv',...
    9,22, data_limits);
 %% Second, copy the list of true branches.
-true_branch_data = SandiaNationalLabTrueNodeData;
+data_limits = 'A1..B271';
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+    0,0, data_limits);
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -40,4 +42,4 @@ for j = 1:numel(num_bits_vector);
     end
 end
 %% Save Data
-save('SG2_1min_12_2','sdr_mat')
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results','sdr_mat')
