@@ -3,17 +3,27 @@ function MI_matrix = find_JVHW_MI(Node_Volt_Matrix,diagonal_flag)
 tic
 
 MI_JVHW = @est_MI_JVHW;
-% this function takes in a 3d matrix of dimenstional array (real/imaginary, 
-% bus number, observation number) of size 
-% (number of observations, 2, number of buses). The output matrix is
-% a lower triangular matrix since mutual information is symmetric, 
-% I(1,2) = I(2,1).
 
-% calculate the number of buses (this is used in the for loop below).
+% This function finds the MLE MI using scripts written by JVHW (Stanford'
+% Weissman's Lab). THe maximum-liklihood MI is found. 
+
+% Input: Node_Volt_Matrix - 2d matrix with size (time of observation, node
+% number) and values of voltgnitude taken at time (row) and node (column). 
+
+% Input: diagonal_flag. In cases where we want to plot the MI heatmap we
+% need to calculate the diagonals of the mutual information (MI) matrix.
+% For regular estimation we don't require the diagonals since the graph we
+% estimtae is an acylical graph, a dependance tree. 
+
+% Ouput: Using the JVHW MLE MI script est_MI_MLE.m we can find the maximum
+% liklihood mutual information. The output MI matrix has size (number of
+% nodes, number of nodes). Only the lower triangular portion of the matrix
+% is computed since MI is symmetric.
+
 number_of_buses = numel(Node_Volt_Matrix(1,:));
 
 
-% initialize the joint entropy matrix, note the size it determined
+% Initialize the Mutual information matrix, note the size is determined
 % by the number of buses in the grid.
 MI_matrix = zeros(number_of_buses,number_of_buses);
 
