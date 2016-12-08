@@ -18,12 +18,9 @@ end
 %number_of_cols = numel(input_matrix(1,:));
 %min_zero_mat = zeros(size(input_matrix));
 
-% for i = 1:number_of_cols
-%     min_zero_mat(:,i) = input_matrix(:,i) - global_min;
-% end
 min_zero_mat = input_matrix - global_min;
 
-bin_size = (global_max-global_min)/(2^bits - 1)
+bin_size = (global_max-global_min)/(2^bits - 1);
 
 % Now find new values for data:
 
