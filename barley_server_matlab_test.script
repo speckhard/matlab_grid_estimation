@@ -7,4 +7,4 @@
 #$ -M dts@stanford.edu
 
 module load matlab
-matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_discrete_tests.m
+matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main.m
