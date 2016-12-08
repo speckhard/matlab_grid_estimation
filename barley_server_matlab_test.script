@@ -5,6 +5,8 @@
 #$ -N matlab_example
 #$ -m bes
 #$ -M dts@stanford.edu
+#$ -j y
+#$ -cwd
 
 module load matlab
 matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main.m
