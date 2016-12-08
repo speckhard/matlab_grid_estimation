@@ -8,7 +8,7 @@
 data_limits = 'W10..KI525610';
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
 %    9,22, data_limits);
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Dowloads/SG2_data_solar_1min.csv',...
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Dowloads/SG2_data_1min.csv',...
    9,22, data_limits);
 %% Second, copy the list of true branches.
 data_limits = 'A1..B271';
@@ -35,7 +35,7 @@ est_branch_matrices = zeros(num_nodes-1,2,3);
 % Create a matrix to store MI_matrix. 
 MI_matrices = zeros(num_nodes,num_nodes,3);
 
-for i = 1:2
+for i = 1:3
     if i == 1
         MI_vector = 'gaussian';
         num_bits = 'no discretization';
@@ -52,7 +52,7 @@ for i = 1:2
         MI_vector,'no_deriv','nograph',...
         'no heat_map', num_bits);
     % Store sdr.
-    sdr_mat(i) = sdr;
+    sdr_mat(i) = sdr
     % Store estimtated branches list.
     est_branch_matrices(:,:,i) = est_branch_list;
     % Store mutual information matrix.
@@ -76,5 +76,5 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG-solar-1min-deriv'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG-1min-deriv'...
      ,'results')
