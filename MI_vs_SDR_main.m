@@ -26,7 +26,7 @@ node_volt_matrix = take_derivative(node_volt_matrix);
 % Number of nodes contained in data-set.
 num_nodes = numel(node_volt_matrix(1,:));
 % Create a matrix to save SDR data.
-sdr_mat = zeros(3, numel(num_bits_vector));
+sdr_mat = zeros(3, 1);
 compute_sdr = @run_chow_liu_return_data;
 % Create a matrix to store estimated branches.
 est_branch_matrices = zeros(num_nodes-1,2,3); 
@@ -66,7 +66,7 @@ bin_size = (global_max-global_min)/(2^num_bits - 1);
 field1 = 'sdr';
 field2 = 'est_branches';
 field3 = 'MI';
-field4 = 'bin_size'
+field4 = 'bin_size';
 value1 = sdr_mat;
 value2 = est_branch_matrices;
 value3 = MI_matrices;
@@ -75,4 +75,4 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
 save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG-1min-deriv'...
-     ,'sdr_mat')
+     ,'results')
