@@ -6,14 +6,14 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KI525610';
-% node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
-%    9,22, data_limits);
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia_Data/SG2_data_volt_1min.csv',...
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
    9,22, data_limits);
+%node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
 data_limits = 'A1..B271';
 true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
     0,0, data_limits);
+%true_branch_data = squeeze(mpc_base.branch(:,1:2)-1);
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -28,28 +28,31 @@ node_volt_matrix = take_derivative(node_volt_matrix);
 % Number of nodes contained in data-set.
 num_nodes = numel(node_volt_matrix(1,:));
 % Create a matrix to save SDR data.
-sdr_mat = zeros(3, 1);
+sdr_mat = zeros(4, 1);
 compute_sdr = @run_chow_liu_return_data;
 % Create a matrix to store estimated branches.
-est_branch_matrices = zeros(num_nodes-1,2,3); 
+est_branch_matrices = zeros(num_nodes-1,2,4); 
 % Create a matrix to store MI_matrix. 
-MI_matrices = zeros(num_nodes,num_nodes,3);
+MI_matrices = zeros(num_nodes,num_nodes,4);
 
 for i = 1:3
     if i == 1
-        MI_vector = 'gaussian';
+        MI_method = 'gaussian';
         num_bits = 'no discretization';
     elseif i == 2
-        MI_vector = 'JVHW';
+        MI_method = 'JVHW';
         num_bits = 14;
-    else i == 3
-        MI_vector = 'discrete';
+    elseif i == 3
+        MI_method = 'discrete';
+        num_bits = 14;
+    else 
+        MI_method = 'MLE'
         num_bits = 14;
     end
     % Run Chow-Liu, return the sdr and the estimated branch list.
     [sdr, est_branch_list, mutual_information_mat] = ...
         compute_sdr(node_volt_matrix,true_branch_data, ...
-        MI_vector,'no_deriv','nograph',...
+        MI_method,'no_deriv','nograph',...
         'no heat_map', num_bits);
     % Store sdr.
     sdr_mat(i) = sdr
