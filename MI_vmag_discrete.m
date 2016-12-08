@@ -27,7 +27,7 @@ prob_matrix = sparse(possib_num_outcomes, num_nodes);
 
 % Find individual probabilities
 % Cycle through the nodes and find the P(Vmag(Node i == Outcome))
-% tic
+%tic
 for i = 1:num_nodes
     % The possible_outcomes_vec sets the edges, but if we dont add a final
     % edge at the end, we end up binning the last two possible values
@@ -37,11 +37,12 @@ for i = 1:num_nodes
         [possib_outcomes_vec (max_discrete_val+1)])/num_observations;
 end
 
-
+%disp('time to find the single_node_prob_matrix')
+%toc
 mutual_information_matrix = zeros(num_nodes,num_nodes);
 joint_pf = int32(zeros(possib_num_outcomes, possib_num_outcomes));
 % Find the mutual information matrix
-% tic
+%tic
 for i = 1:num_nodes
     for j =1:(i-1) % Only calculate lower triangular portion.
         % Caclulate the joint pdf of both nodes
@@ -51,6 +52,14 @@ for i = 1:num_nodes
 %           /num_observations);
         joint_pf = sparse(hist3([node_volt_matrix(:,i),node_volt_matrix(:,j)], ...
             'Edges',{possib_outcomes_vec,possib_outcomes_vec}));
+
+%tic
+%           joint_pf = sparse(histcounts2(node_volt_matrix(:,i), ...
+%             node_volt_matrix(:,j), possib_outcomes_vec, ...
+%             possib_outcomes_vec));
+%disp('time to find joint_probability')
+%toc
+        
 %          disp('time to find the joint_pf')
 %          toc
 %         % Cycle through possible outcomes, in joint_pf (size possib
@@ -62,6 +71,7 @@ for i = 1:num_nodes
         % matrix, we can only throw in non-zero P(x,y) values (which means
         % non-zero P(x) and P(y) values) into our MI equation. 
         [x, y, joint_non_zero_prob] = find(joint_pf);
+%         tic 
         for k = 1:numel(joint_non_zero_prob)
             mutual_information_matrix(i,j) = ...
                 mutual_information_matrix(i,j) + joint_non_zero_prob(k)...
@@ -69,6 +79,8 @@ for i = 1:num_nodes
                 /num_observations/(prob_matrix(x(k),i)...
                 *prob_matrix(y(k),j)));
         end
+%         disp('time to sum up mutual information terms for 2 nodes')
+%         toc
 %         for k = 1:possib_num_outcomes
 %             for l = 1:possib_num_outcomes
 %                 if joint_pf(k,l) ~= 0  % prob_matrix(k,i) ~= 0) && (prob_matrix(l,j) ~=0)
@@ -83,6 +95,6 @@ for i = 1:num_nodes
 %         toc
     end
 end
-% disp('time to find MI matrix after P(x) matrix is known')
-% toc
+%disp('time to find MI matrix after P(x) matrix is known')
+%toc
 %                 
