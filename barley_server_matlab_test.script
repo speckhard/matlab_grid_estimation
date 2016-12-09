@@ -3,7 +3,7 @@
 #!/bin/bash
 
 #$ -N matlab_example
-#$ -m bes
+#$ -m besan
 #$ -M dts@stanford.edu
 #$ -j y
 #$ -cwd
