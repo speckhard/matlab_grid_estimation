@@ -29,20 +29,19 @@ function [sdr_percent, estimated_node_pairs, mutual_information_matrix]...
 % between nodes using the method specifid in MI_flag. The matrix is size
 % (num nodes, num nodes). 
 
+%% Take the derivative of the data if deriv flag set.
 if strcmp(deriv_flag, 'deriv')
-    %% Take the derivative of the data
     disp('taking deriv of data')
     take_derivative = @consider_derivative;
     Node_Volt_Matrix = take_derivative(Node_Volt_Matrix);
 end
 
+
+%% Digitize the input if num_bits flag set. 
 if strcmp(num_bits,'no discretization') ~= 1
     if isinteger(int8(num_bits)) ~= 1
         error('Num Bits (the last arg) is not an integer below 255')
     end
-%     disp('digitizing input to') 
-%     disp(num_bits)
-    %% Digitize the Input
     digitizer = @digitize_sig; % Import the digitizer
     Node_Volt_Matrix = digitizer(Node_Volt_Matrix, ...
     num_bits, 'local','local');
@@ -87,6 +86,13 @@ elseif strcmp(MI_flag, 'discrete')
     mutual_information_matrix = find_discrete_MI(Node_Volt_Matrix, ...
         num_bits);
     disp('Time to find the discrete MI')
+    toc
+elseif strcmp(MI_flag, 'MLE')
+    tic
+    MLE_MI = @find_MLE_MI;
+    mutual_information_matrix = MLE_MI(Node_Volt_Matrix, ...
+        'no diagonals');
+    disp('Time to find the discrete MI ')
     toc
 else
     error('entropy flag can only be gaussian or JVHW')
