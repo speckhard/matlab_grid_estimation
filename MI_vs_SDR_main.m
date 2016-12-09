@@ -3,9 +3,9 @@
 %% First, copy all except feeder SG data into a new matrix.
 % 60 min file has 8770 datapoints
 % 15 min file has 35050 datapoints
-% Column W corresponds to Node 1, Column KI corresponds to node 272. We
+% Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
-data_limits = 'W10..KI525610';
+data_limits = 'W10..KH525610';
 node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
    9,22, data_limits);
 %node_volt_matrix = v_vec(:,2:end);
@@ -79,5 +79,5 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-1min-deriv_12_10'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-1min-deriv_12_10-fixed272node'...
      ,'results')
