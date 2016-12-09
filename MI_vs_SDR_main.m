@@ -28,12 +28,12 @@ node_volt_matrix = take_derivative(node_volt_matrix);
 % Number of nodes contained in data-set.
 num_nodes = numel(node_volt_matrix(1,:));
 % Create a matrix to save SDR data.
-sdr_mat = zeros(4, 1);
+sdr_mat = zeros(3, 1);
 compute_sdr = @run_chow_liu_return_data;
 % Create a matrix to store estimated branches.
-est_branch_matrices = zeros(num_nodes-1,2,4); 
+est_branch_matrices = zeros(num_nodes-1,2,3); 
 % Create a matrix to store MI_matrix. 
-MI_matrices = zeros(num_nodes,num_nodes,4);
+MI_matrices = zeros(num_nodes,num_nodes,3);
 
 for i = 1:4
     if i == 1
@@ -79,5 +79,5 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-solar-1min-deriv_12_7'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-solar-1min-deriv_12_10'...
      ,'results')
