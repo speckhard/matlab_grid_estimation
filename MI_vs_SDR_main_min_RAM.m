@@ -15,9 +15,9 @@ node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_dat
 % node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
 data_limits = 'A1..B271';
-% true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
-%     0,0, data_limits);
-true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+    0,0, data_limits);
+% true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
 %% Remove redundant nodes from the dataset.
 % The guts of the following section is derived from
 % collapse_redundant_data.m.
@@ -97,7 +97,7 @@ for MI_counter = 1:3
         num_bits = 14;
     end
     
-    node_volt_matrix = v_vec(:,2:end);
+
     % Run Chow-Liu, return the sdr and the estimated branch list.
     %% Consider The Derivative of Data.
     %This function is based on consider_derivative.m.
