@@ -3,10 +3,10 @@
 #!/bin/bash
 
 #$ -N matlab_example
-#$ -m besan
-#$ -M dts@stanford.edu
-#$ -j y
 #$ -cwd
+#$ -M dts@stanford.edu
+#$ -m besan
+#$ -j y
 
 module load matlab
-matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main.m
+matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main_min_RAM.m
