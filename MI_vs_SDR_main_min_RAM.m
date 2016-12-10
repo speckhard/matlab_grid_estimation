@@ -10,7 +10,7 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KI525610';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Sandia Data/SG2_data_volt_1min.csv',...
    9,22, data_limits);
 % node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
@@ -259,6 +259,6 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-solar-1min-deriv_12_10_min_RAM_barley'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-non-solar-1min-deriv_12_10_min_RAM_corn'...
      ,'results')
 % save('results')
