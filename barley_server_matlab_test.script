@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_SG2_1min_deriv_solar
+#$ -N matlab_SG2_15min_deriv_nonsolar_no_feeder
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
