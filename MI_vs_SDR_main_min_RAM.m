@@ -10,7 +10,7 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KI525610';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_15min.csv',...
    9,22, data_limits);
 % node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
@@ -71,7 +71,16 @@ disp('time to remove redundant nodes')
 toc
 %% Remove Redundant Branches.
 remove_useless_branches = @remove_redundant_branches;
-true_branch_data = remove_useless_branches(true_branch_data); 
+true_branch_data = remove_useless_branches(true_branch_data);
+
+%% Consider The Derivative of Data.
+%This function is based on consider_derivative.m.
+tic
+node_volt_matrix = node_volt_matrix(2:end,:) ...
+    - node_volt_matrix(1:(end-1),:);
+disp('time to take the quasi derivative of the data')
+toc
+
 %% Run Chow-Liu
 % Number of nodes contained in data-set.
 num_nodes = numel(node_volt_matrix(1,:));
@@ -85,27 +94,17 @@ MI_matrices = zeros(num_nodes,num_nodes,3);
 
 for MI_counter = 1:3
     disp('value of i')
-    MI_counter
     if MI_counter == 1
-        MI_flag = 'gaussian';
+        MI_flag = 'gaussian'
         num_bits = 'no discretization';
     elseif MI_counter == 2
-        MI_flag = 'JVHW';
+        MI_flag = 'JVHW'
         num_bits = 14;
     else
-        MI_flag = 'MLE';
+        MI_flag = 'MLE'
         num_bits = 14;
     end
-    
-
     % Run Chow-Liu, return the sdr and the estimated branch list.
-    %% Consider The Derivative of Data.
-    %This function is based on consider_derivative.m.
-    tic
-    node_volt_matrix = node_volt_matrix(2:end,:) ...
-        - node_volt_matrix(1:(end-1),:);
-    disp('time to take the quasi derivative of the data')
-    toc
     % Check if we need to discreteize
     if strcmp(num_bits,'no discretization') ~= 1
         if isinteger(int8(num_bits)) ~= 1
@@ -212,7 +211,7 @@ for MI_counter = 1:3
     %% Find Min Span Tree using Kruskal.m
     tic
     find_min_span_tree = @kruskal;
-    mat_of_connectivity = find_min_span_tree(mutual_information_matrix)
+    mat_of_connectivity = find_min_span_tree(mutual_information_matrix);
     disp('time required to run Kruskal')
     toc
     
@@ -224,7 +223,7 @@ for MI_counter = 1:3
         for k_connec = 1:i_connec-1
             if (mat_of_connectivity(i_connec,k_connec) ~=0)
                 p = p +1;
-                estimated_node_pairs(p,:) = [i_connec,k_connec]
+                estimated_node_pairs(p,:) = [i_connec,k_connec];
             end
         end
     end
@@ -233,10 +232,10 @@ for MI_counter = 1:3
     find_sdr = @findSDR;
     [succesful_branch_counter, SDR] = ...
         find_sdr(estimated_node_pairs, true_branch_data);
-    sdr_percent = SDR;
+    sdr_percent = SDR
     
     % Store sdr.
-    sdr_mat(MI_counter) = SDR
+    sdr_mat(MI_counter) = SDR;
     % Store estimtated branches list.
     est_branch_matrices(:,:,MI_counter) = estimated_node_pairs;
     % Store mutual information matrix.
@@ -245,7 +244,7 @@ end
 %% Calculate Bin Size, before saving. 
 global_min = min(min(node_volt_matrix));
 global_max = max(max(node_volt_matrix));
-%bin_size = (global_max-global_min)/(2^num_bits - 1);
+bin_size = (global_max-global_min)/(2^num_bits - 1);
 %% Save Data
 % Create a structure to store analysis data. 
 field1 = 'sdr';
@@ -259,6 +258,6 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-solar-1min-deriv_12_11_min_RAM_corn'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-15min-deriv_12_11_min_RAM_barley'...
      ,'results')
 % save('results')
