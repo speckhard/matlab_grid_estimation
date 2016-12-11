@@ -2,11 +2,11 @@
 
 #!/bin/bash
 
-#$ -N matlab_example
+#$ -N matlab_SG2_15min_deriv
 #$ -cwd
 #$ -M dts@stanford.edu
-#$ -m besan
-#$ -j y
+#$ -m besa
+#$ -j yes
 
 module load matlab
 matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main_min_RAM.m
