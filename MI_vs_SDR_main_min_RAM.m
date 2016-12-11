@@ -5,11 +5,12 @@
 % saves massive amounts of memory.
 
 %% First, copy all except feeder SG data into a new matrix.
-% 60 min file has 8770 datapoints
-% 15 min file has 35050 datapoints
+% 60 min file has 8770 datapoints. End point 8780. 
+% 15 min file has 35050 datapoints. End point 35060
+% 1min file has 525600 datapoints. End point 515610
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
-data_limits = 'W10..KI525610';
+data_limits = 'W10..KI35060';
 node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_15min.csv',...
    9,22, data_limits);
 %  node_volt_matrix = v_vec(:,2:end);
