@@ -10,14 +10,14 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KI525610';
-% node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_15min.csv',...
-%    9,22, data_limits);
- node_volt_matrix = v_vec(:,2:end);
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_15min.csv',...
+   9,22, data_limits);
+%  node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
 data_limits = 'A1..B271';
-% true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
-%     0,0, data_limits);
-true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+    0,0, data_limits);
+% true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
 %% Remove redundant nodes from the dataset.
 % The guts of the following section is derived from
 % collapse_redundant_data.m.
