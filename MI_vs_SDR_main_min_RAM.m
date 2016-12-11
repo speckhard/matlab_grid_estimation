@@ -5,13 +5,13 @@
 % saves massive amounts of memory.
 
 %% First, copy all except feeder SG data into a new matrix.
-% 60 min file has 8770 datapoints. End point 8780. 
-% 15 min file has 35050 datapoints. End point 35060
+% 60 min file has 8760 datapoints. End point 8770. 
+% 15 min file has 35040 datapoints. End point 35050
 % 1min file has 525600 datapoints. End point 515610
 % Column W corresponds to Node 1, Column KI corresponds to node 272. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KI35060';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_15min.csv',...
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
    9,22, data_limits);
 %  node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
@@ -258,6 +258,6 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-% save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-15min-deriv_12_11_min_RAM_barley'...
-%      ,'results')
-save('/Users/Dboy/Downloads/results','results')
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-1min-deriv_12_12_min_RAM_barley'...
+     ,'results')
+%save('/Users/Dboy/Downloads/results','results')
