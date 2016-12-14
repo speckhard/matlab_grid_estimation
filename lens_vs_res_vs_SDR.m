@@ -8,15 +8,24 @@
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..KH525610';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
-   9,22, data_limits);
+data_limits = 'W10..BV525610';
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv',
+    9,22,data_limits);
+% node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
+%    9,22, data_limits);
+% node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt.csv',...
+%    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
-data_limits = 'A1..B271';
-true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+data_limits = 'A1..B51';
+% true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+%     0,0, data_limits);
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
     0,0, data_limits);
+% true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
+%     0,0, data_limits);
 %true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
+%true_branch_data = SGTrueBranchesData;
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -26,7 +35,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1, 5, 15, 30, 60];
-lens_size_vec = 24*60*[1 4 7 14 30 60 90 364];
+lens_size_vec = 24*60*[1 4 7 14 30 60 90 180 365];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -84,7 +93,7 @@ for i = 1:numel(downsample_vec);
                     [sdr, estimated_branch_list, MI_mat, leaf_node_SDR, ...
                         two_branch_node_SDR, three_branch_node_SDR] = ...
                         run_chow_liu(node_volt_mat_lens, ...
-                        true_branch_data, MI_method, 'no deriv', num_bits);
+                        true_branch_data, MI_method, 'deriv', num_bits);
                     sdr
                     leaf_node_SDR
                     temp_sdr_mat(k,l) = sdr;
@@ -112,6 +121,8 @@ field5 = 'two_branch_mean_sdr';
 field6 = 'two_branch_std_sdr';
 field7 = 'three_branch_mean_sdr';
 field8 = 'three_branch_std_sdr';
+field9 = 'downsample_vec';
+field10 = 'lens_vec';
 value1 = mean_sdr_mat;
 value2 = std_sdr_mat;
 value3 = leaf_mean_sdr_mat;
@@ -120,10 +131,12 @@ value5 = two_branch_mean_sdr_mat;
 value6 = two_branch_std_sdr_mat;
 value7 = three_branch_mean_sdr_mat;
 value8 = three_branch_std_sdr_mat;
+value9 = downsample_vec;
+value10 = lens_size_vec;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
-    field8, value8);
+    field8, value8, field9, value9, field10, value10);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_solar_deriv_lens_res_barley_12_14'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG_deriv_lens_res_corn_12_15'...
      ,'results')
