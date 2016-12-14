@@ -9,7 +9,7 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
 data_limits = 'W10..BV525610';
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv',
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
