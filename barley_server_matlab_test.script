@@ -2,11 +2,11 @@
 
 #!/bin/bash
 
-#$ -N matlab_SG2_60min_deriv_nonsolar_no_feeder
+#$ -N matlab_SG2_1min_lens_res_12_14_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
 #$ -j yes
 
 module load matlab
-matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/MI_vs_SDR_main_min_RAM.m
+matlab -nodesktop </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/lens_vs_res_vs_SDR.m
