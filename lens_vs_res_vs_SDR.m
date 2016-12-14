@@ -13,7 +13,7 @@ node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
-% node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt.csv',...
+% node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt_solar.csv',...
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
@@ -67,7 +67,7 @@ for i = 1:numel(downsample_vec);
                 error('non-integer lens/res combo')
             end
             
-            num_of_lenses = floor(num_mins/lens_size);
+            num_of_lenses = floor((num_mins)/lens_size);
 
             temp_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_leaf_sdr_mat = zeros( num_of_lenses, num_MI_methods);
@@ -81,7 +81,7 @@ for i = 1:numel(downsample_vec);
                 
                 for l = 1:num_MI_methods
                     if l == 1
-                        num_bits = 'no discretization';
+                        num_bits = 14 %; 'no discretization';
                         MI_method = 'gaussian';
                     elseif l ==2
                         num_bits = 14;
@@ -92,8 +92,8 @@ for i = 1:numel(downsample_vec);
                     end
                     [sdr, estimated_branch_list, MI_mat, leaf_node_SDR, ...
                         two_branch_node_SDR, three_branch_node_SDR] = ...
-                        run_chow_liu(node_volt_mat_lens, ...
-                        true_branch_data, MI_method, 'deriv', num_bits);
+                        run_chow_liu(node_volt_mat_downsampled, ...
+                        true_branch_data, MI_method, 'no deriv', num_bits);
                     sdr
                     leaf_node_SDR
                     temp_sdr_mat(k,l) = sdr;
@@ -102,14 +102,14 @@ for i = 1:numel(downsample_vec);
                     temp_3branch_sdr_mat(k,l) = three_branch_node_SDR;
                 end        
             end
-            mean_sdr_mat(i,j,:) = mean(temp_sdr_mat);
-            std_sdr_mat(i,j,:) = std(temp_sdr_mat);
-            leaf_mean_sdr_mat(i,j,:) = mean(temp_leaf_sdr_mat);
-            leaf_std_sdr_mat(i,j,:) = std(temp_leaf_sdr_mat);
-            two_branch_mean_sdr_mat(i,j,:) = mean(temp_2branch_sdr_mat);
-            two_branch_std_sdr_mat(i,j,:) = std(temp_2branch_sdr_mat);
-            three_branch_mean_sdr_mat(i,j,:) = mean(temp_3branch_sdr_mat);
-            three_branch_std_sdr_mat(i,j,:) = std(temp_3branch_sdr_mat);
+            mean_sdr_mat(i,j,:) = mean(temp_sdr_mat,1);
+            std_sdr_mat(i,j,:) = std(temp_sdr_mat,1,1);
+            leaf_mean_sdr_mat(i,j,:) = mean(temp_leaf_sdr_mat,1);
+            leaf_std_sdr_mat(i,j,:) = std(temp_leaf_sdr_mat,1,1);
+            two_branch_mean_sdr_mat(i,j,:) = mean(temp_2branch_sdr_mat,1);
+            two_branch_std_sdr_mat(i,j,:) = std(temp_2branch_sdr_mat,1,1);
+            three_branch_mean_sdr_mat(i,j,:) = mean(temp_3branch_sdr_mat,1);
+            three_branch_std_sdr_mat(i,j,:) = std(temp_3branch_sdr_mat,1,1);
         end        
 end
 
