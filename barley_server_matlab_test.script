@@ -9,4 +9,4 @@
 #$ -j yes
 
 module load matlab
-matlab -nodesktop </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/lens_vs_res_vs_SDR.m
+matlab -nodesktop -singleCompThread </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/lens_vs_res_vs_SDR.m
