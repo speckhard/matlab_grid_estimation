@@ -35,7 +35,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1, 5, 15, 30, 60];
-lens_size_vec = 24*60*[1 4 7 14 30 60 90 180 365];
+lens_size_vec = 24*60*[1 4 7 14 30 60 90 180 364];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
