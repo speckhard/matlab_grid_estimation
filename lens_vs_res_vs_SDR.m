@@ -8,8 +8,8 @@
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..KH35050';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_60min.csv',...
+data_limits = 'W10..KH525610';
+node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
@@ -26,7 +26,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1, 5, 15, 30, 60];
-lens_size_vec = 24*60*[1 4 7 10 14 30];
+lens_size_vec = 24*60*[1 4 7 14 30 60 90 364];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -52,8 +52,14 @@ for i = 1:numel(downsample_vec);
               
         for j = 1:numel(lens_size_vec)
             num_mins = numel(node_volt_mat_downsampled(:,1));
-            num_of_lenses = floor(num_mins/lens_size_vec(j));
-            lens_size = lens_size_vec(j);
+            lens_size = lens_size_vec(j)/downsample_vec(i);
+            
+            if lens_size ~= floor(lens_size)
+                error('non-integer lens/res combo')
+            end
+            
+            num_of_lenses = floor(num_mins/lens_size);
+
             temp_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_leaf_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_2branch_sdr_mat = zeros(num_of_lenses, num_MI_methods);
@@ -119,5 +125,5 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-60min-nonsolar-deriv_no_feeder_12_12_min_RAM_barley'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_deriv_lens_res_barley_12_14'...
      ,'results')
