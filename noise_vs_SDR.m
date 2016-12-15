@@ -32,7 +32,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Add Noise to Data
 percent_noise_vec = 1/100*[10^-4, 10^-3.5, 10^-3, 10^-2.5];
-num_MI_methods = 2;
+num_MI_methods = 3;
 num_reps = 20; % Number of repititions to add noise.
 sdr_mat = zeros(numel(percent_noise_vec),num_reps,num_MI_methods);
 leaf_sdr_mat = zeros(numel(percent_noise_vec),num_reps,num_MI_methods);
@@ -90,6 +90,6 @@ value5 = percent_noise_vec;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5)
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_deriv_noise_corn_12_16_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_deriv_noise_barley_12_16_v1'...
      ,'results')
 
