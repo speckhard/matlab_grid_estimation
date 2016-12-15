@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_SG1_solar_lens_res_12_15_v6 
+#$ -N matlab_SG1_lens_res_12_15_v6 
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
