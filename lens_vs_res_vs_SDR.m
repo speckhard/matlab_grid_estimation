@@ -81,7 +81,7 @@ for i = 1:numel(downsample_vec);
                 
                 for l = 1:num_MI_methods
                     if l == 1
-                        num_bits = 14 %; 'no discretization';
+                        num_bits = 'no discretization';
                         MI_method = 'gaussian';
                     elseif l ==2
                         num_bits = 14;
@@ -113,6 +113,7 @@ for i = 1:numel(downsample_vec);
         end        
 end
 
+%% Save Data as a structure
 field1 = 'mean_sdr_mat';
 field2 = 'std_sdr_mat';
 field3 = 'leaf_mean_sdr';
@@ -138,5 +139,5 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8, field9, value9, field10, value10);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_deriv_lens_res_corn_12_16'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_deriv_lens_res_corn_12_16_v2'...
      ,'results')
