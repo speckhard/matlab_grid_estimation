@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_SG1_noise_v2
+#$ -N matlab_SG1_solar_noise_v3
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
