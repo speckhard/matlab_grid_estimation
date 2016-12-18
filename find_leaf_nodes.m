@@ -5,6 +5,17 @@ function leaf_node_list = find_leaf_nodes(true_branch_list)
 % and returns the nodes which are only connected to one other node in a 
 % 1D list. 
 
+% Inputs:
+% - true_branch_list, is the list of pairs of nodes which are connected in
+% the true graph of the smart grid. There are (number of nodes - 1) rows. 
+% (number of nodes - 1) is the total number of branches in an acylic graph
+% (dependence tree) which is the approximation used to model the smart
+% grid.
+
+% Outputs:
+% - leaf_node_list, is a list of node numbers corresponding to nodes which
+% are connected to only one branch in the true graph. 
+
 
 leaf_counter = 1; % Counter to keep track of number of leaf nodes.
 num_branches = numel(true_branch_list(:,1)); 
