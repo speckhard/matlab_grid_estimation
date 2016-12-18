@@ -34,8 +34,8 @@ else
     loop_endpoint = 1;
 end
 
-for i=1:number_of_buses
-    parfor k=1:(i-loop_endpoint)
+parfor i=1:number_of_buses
+    for k=1:(i-loop_endpoint)
 %         if k == i % we don't care about h(1,1) since we don't use it
 %             in mutual information calculations
 %             joint_entropy_matrix(k,i) = 0;
