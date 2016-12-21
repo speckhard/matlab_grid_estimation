@@ -67,9 +67,5 @@ if isequal(MI_mat_JVHW, MI_mat_JVHW_lin_par)
 else disp('MIs from lin-par and non-par JVHW methods are not the same')
 end
 
-
-
-
-
 %% Close Matlab Parallel Environment
 matlabpool close
