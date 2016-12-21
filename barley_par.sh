@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_JVHW_lin_parfor_v5
+#$ -N matlab_par_JVHW_lin_parfor_v6
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
