@@ -26,6 +26,14 @@ bin_size = (global_max-global_min)/(2^bits - 1);
 
 digitized_mat = round(min_zero_mat./bin_size);
 
+% If the num bits is lower than 16, let's save space and save the matrix a
+% a matrix of uint16 values. 
+
+if bits < 16 
+    digitized_mat = uint16(digitized_mat);
+    disp('creating 16 bit mat.')
+end
+
 disp('time to digitize data')
 toc
 end
