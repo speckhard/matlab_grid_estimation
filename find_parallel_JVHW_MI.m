@@ -34,15 +34,8 @@ else
     loop_endpoint = 1;
 end
 
-parfor i=1:number_of_buses
-    for k=1:(i-loop_endpoint)
-%         if k == i % we don't care about h(1,1) since we don't use it
-%             in mutual information calculations
-%             joint_entropy_matrix(k,i) = 0;
-        %else 
-            % squeeze is used here to ensure v_clean_matrix is taken
-            % as a column vector and not as a three dimensional matrix
-            % of size (1,1,number of observations).
+for i=1:number_of_buses
+    parfor k=1:(i-loop_endpoint)
             MI_matrix(i,k) = MI_JVHW(Node_Volt_Matrix(:,i),...
                 Node_Volt_Matrix(:,k));
         
