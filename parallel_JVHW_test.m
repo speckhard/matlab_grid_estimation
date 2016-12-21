@@ -9,7 +9,8 @@ cluster.JobStorageLocation = tmpdirforpool
 msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
 cluster.NumWorkers = str2num(getenv('NSLOTS'))
 
-matlabpool(cluster)
+parpool(cluster)
+isempty(gcp('nocreate'))
 
 %% First, copy all except feeder SG data into a new matrix.
 % 60 min file has 8770 datapoints
@@ -17,8 +18,10 @@ matlabpool(cluster)
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..BV525610';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
-   9,22, data_limits);
+% node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
+%    9,22, data_limits);
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
+    9,22,data_limits);
 % node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt_solar.csv',...
 %    9,22, data_limits);
 %node_volt_matrix = v_vec(:,2:end);
@@ -68,4 +71,4 @@ else disp('MIs from lin-par and non-par JVHW methods are not the same')
 end
 
 %% Close Matlab Parallel Environment
-matlabpool close
+delete(gcp('nocreate'))
