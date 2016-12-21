@@ -29,21 +29,21 @@ number_of_buses = numel(Node_Volt_Matrix(1,:));
 
 % Initialize the Mutual information matrix, note the size is determined
 % by the number of buses in the grid.
-MI_matrix = zeros(number_of_buses*number_of_buses,1);
-
+MI_matrix_lin = zeros(number_of_buses*number_of_buses,1);
+MI_matrix_non_lin = zeros(number_of_buses, number_of_buses);
 % Let's linearize the indices
-iterations = size(MI_matrix);
+iterations = size(MI_matrix_non_lin);
 loop_end = prod(iterations) - number_of_buses;
 
 % We run through one linearized for loop to
 parfor j = 1:loop_end
-    [i,k] = ind2sub(iterations, j)   
+    [i,k] = ind2sub(iterations, j);  
     if i > k
-        MI_matrix(j) = MI_JVHW(Node_Volt_Matrix(:,i),...
+        MI_matrix_lin(j) = MI_JVHW(Node_Volt_Matrix(:,i),...
             Node_Volt_Matrix(:,k));
     end
 end
 
-MI_matrix = vec2mat(MI_matrix, number_of_buses);
+MI_matrix = reshape(MI_matrix_lin, iterations);
 disp('time to find the JVHW MI')
 toc
