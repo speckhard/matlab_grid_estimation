@@ -1,4 +1,16 @@
 % Scirpt to test parallelization of JVHW method.
+
+%% Initialize Parallel Cluster Environment
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+matlabpool(cluster)
+
 %% First, copy all except feeder SG data into a new matrix.
 % 60 min file has 8770 datapoints
 % 15 min file has 35050 datapoints
@@ -42,8 +54,22 @@ MI_mat_JVHW = JVHW_MI(node_volt_matrix, ...
 JVHW_MI = @find_parallel_JVHW_MI;
 MI_mat_JVHW_par = JVHW_MI(node_volt_matrix, ...
     'no diagonals'); 
+%% Find the lin par JVHW
+JVHW_MI = @find_lin_par_JVHW_MI;
+MI_mat_JVHW_lin_par = JVHW_MI(node_volt_matrix); 
 %% Compare the two matrices to ensure they are the same. 
 if isequal(MI_mat_JVHW_par, MI_mat_JVHW)
     disp('MIs from par and non-par JVHW methods are the same')
 else disp('MIs from par and non-par JVHW methods are not the same')
 end
+if isequal(MI_mat_JVHW, MI_mat_JVHW_lin_par)
+    disp('MIs from lin-par and non-par JVHW methods are the same')
+else disp('MIs from lin-par and non-par JVHW methods are not the same')
+end
+
+
+
+
+
+%% Close Matlab Parallel Environment
+matlabpool close
