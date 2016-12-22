@@ -70,5 +70,16 @@ if isequal(MI_mat_JVHW, MI_mat_JVHW_lin_par)
 else disp('MIs from lin-par and non-par JVHW methods are not the same')
 end
 
+%% Save results
+field1 = 'MI_reg';
+value1 = MI_mat_JVHW;
+field2 = 'MI_outer';
+value2 = MI_mat_JVHW_par;
+field3= 'MI_linpar';
+value3 = MI_mat_JVHW_lin_par;
+
+results = struct(field1, value1, field2, value2, field3, value3);
+
+
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
