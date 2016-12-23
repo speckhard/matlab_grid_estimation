@@ -79,7 +79,7 @@ field3= 'MI_linpar';
 value3 = MI_mat_JVHW_lin_par;
 
 results = struct(field1, value1, field2, value2, field3, value3);
-
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/parallel_v1.mat','results')
 
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
