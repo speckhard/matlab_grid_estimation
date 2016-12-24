@@ -1,3 +1,14 @@
+%% Initialize Parallel Cluster Environment
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -109,3 +120,5 @@ results = struct(field1, value1, field2, value2, field3, value3,...
 % Save a .mat file.
 save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_deriv_lens_sig_digs_12_24_v1'...
      ,'results')
+ %% Close Matlab Parallel Environment
+delete(gcp('nocreate'))
