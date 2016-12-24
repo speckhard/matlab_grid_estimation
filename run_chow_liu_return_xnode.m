@@ -4,7 +4,7 @@
 function [sdr_percent, estimated_node_pairs, mutual_information_matrix,...
     leaf_node_SDR, two_branch_node_SDR, three_branch_node_SDR]...
     = run_chow_liu_return_xnode(Node_Volt_Matrix,...
-    true_branch_pairs, MI_flag, deriv_flag,  ...
+    true_branch_pairs, MI_flag, deriv_flag, deriv_step_size, ...
      num_bits, sig_digit_flag, sig_digit)
 
 % This function runs the Chow-Liu algorithm on grid vmag data.
@@ -48,6 +48,10 @@ if strcmp(deriv_flag, 'deriv')
     disp('taking deriv of data')
     take_derivative = @consider_derivative;
     Node_Volt_Matrix = take_derivative(Node_Volt_Matrix);
+elseif strcmp(deriv_flag, 'vary_deriv')
+    disp(['taking deriv step size', deriv_step_size])
+    take_derivative = @var_deriv;
+    Node_Volt_Matrix = take_derivative(Node_Volt_Matrix, deriv_step_size);  
 end
 
 
