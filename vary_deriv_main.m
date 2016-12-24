@@ -30,10 +30,10 @@ node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
 data_limits = 'A1..B51';%'A1..B51';%'A1..B271';
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
 %     0,0, data_limits);
-% true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
-%     0,0, data_limits);
-true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
     0,0, data_limits);
+% true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
+%     0,0, data_limits);
 %true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
 %true_branch_data = SGTrueBranchesData;
 
@@ -61,7 +61,7 @@ three_branch_sdr_mat = zeros(3, numel(deriv_step_size_vec));
 compute_sdr = @run_chow_return_xnode;
 MI_mat_counter = 1;
 num_MI_methods = 3;
-num_nodes = numel(node_volt_matrix(1,:))
+num_nodes = numel(node_volt_matrix(1,:));
 MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods*numel(deriv_step_size_vec));
 
 for i = 1:numel(deriv_step_size_vec)
