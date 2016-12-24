@@ -5,7 +5,7 @@ function [sdr_percent, estimated_node_pairs, mutual_information_matrix,...
     leaf_node_SDR, two_branch_node_SDR, three_branch_node_SDR]...
     = run_chow_liu_return_xnode(Node_Volt_Matrix,...
     true_branch_pairs, MI_flag, deriv_flag,  ...
-     num_bits)
+     num_bits, sig_digit_flag, sig_digit)
 
 % This function runs the Chow-Liu algorithm on grid vmag data.
 
@@ -32,6 +32,16 @@ function [sdr_percent, estimated_node_pairs, mutual_information_matrix,...
 % - mutual_information_matrix is the matrix of mutual information computed
 % between nodes using the method specifid in MI_flag. The matrix is size
 % (num nodes, num nodes). 
+
+%% Check if sig_dig_flag is set
+if strcmp(sig_digit_flag, 'sig_dig')
+    disp('Taking significant digit for JVHW or Discrete MI Methods')
+    take_sig_dig = @sig_dig;
+    Node_Volt_Matrix = take_sig_dig(Node_Volt_Matrix, sig_digit);
+elseif strcmp(sig_digit_flag, 'round')
+    disp('Rounding data for sig dig tests for Gaussian Method')
+    Node_Volt_Matrix = round(Node_Volt_Matrix, sig_digit);
+end
 
 %% Take the derivative of the data if deriv flag set.
 if strcmp(deriv_flag, 'deriv')
@@ -78,9 +88,9 @@ if strcmp(MI_flag, 'gaussian')
 elseif strcmp(MI_flag, 'JVHW')
     %% Find the JVHW MI
     tic
-    JVHW_MI = @find_JVHW_MI;
-    mutual_information_matrix = JVHW_MI(Node_Volt_Matrix, ...
-        'no diagonals'); % This last option, ensures diagonal values
+    JVHW_MI = @find_lin_par_JVHW_MI;
+    mutual_information_matrix = JVHW_MI(Node_Volt_Matrix); 
+    % This last option, ensures diagonal values
     % are not computed.
 %    disp('time to find the JVHW MI')
     toc 
@@ -89,13 +99,12 @@ elseif strcmp(MI_flag, 'discrete')
     find_discrete_MI = @MI_vmag_discrete;
     mutual_information_matrix = find_discrete_MI(Node_Volt_Matrix, ...
         num_bits);
-    disp('Time to find the discrete MI')
+%     disp('Time to find the discrete MI')
     toc
 elseif strcmp(MI_flag, 'MLE')
     tic
-    MLE_MI = @find_MLE_MI;
-    mutual_information_matrix = MLE_MI(Node_Volt_Matrix, ...
-        'no diagonals');
+    MLE_MI = @find_lin_par_MLE_MI;
+    mutual_information_matrix = MLE_MI(Node_Volt_Matrix);
 %    disp('Time to find the discrete MI ')
     toc
 else
