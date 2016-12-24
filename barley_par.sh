@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_sig_dig_SG_v6
+#$ -N matlab_par_sig_dig_SG1solar_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
