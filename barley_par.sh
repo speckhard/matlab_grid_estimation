@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_sig_dig_SG2_v1
+#$ -N matlab_par_vary_deriv_SG1_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
@@ -11,4 +11,4 @@
 #$ -l mem_free=4.2G
 
 module load matlab
-matlab -nodesktop -r 'maxNumCompThreads' </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/sig_dig_main.m
+matlab -nodesktop -r 'maxNumCompThreads' </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/vary_deriv_main.m
