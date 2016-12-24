@@ -26,6 +26,14 @@ true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagop
 %     0,0, data_limits);
 %true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
 %true_branch_data = SGTrueBranchesData;
+
+% For 123 Node Network
+% load('/Users/Dboy/Downloads/Node123_RandPF.mat')
+% % Remove the feeder node 
+% node_volt_matrix = v_vec(:,2:end);
+% true_branch_data = mpc_base.branch(2:end,1:2);
+% true_branch_data = true_branch_data -1;
+
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -35,7 +43,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1, 5, 15, 30, 60];
-lens_size_vec = 24*60*[1 4 7 14 30 60 90 180 364];
+lens_size_vec = 24*60*[1 2 3 4 5 6 7];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -139,5 +147,5 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8, field9, value9, field10, value10);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_solar_deriv_lens_res_corn_12_19_v7'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_solar_deriv_lens_res_corn_12_23_v1'...
      ,'results')
