@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_num_bits_SG1_v4
+#$ -N matlab_par_dsample_method_SG1_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
@@ -11,4 +11,4 @@
 #$ -l mem_free=4.2G
 
 module load matlab
-matlab -nodesktop -r 'maxNumCompThreads' </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/num_bits_main.m
+matlab -nodesktop -r 'maxNumCompThreads' </afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Matlab_Code/Rajagopal_Grid_Estimation/dsample_method_main.m
