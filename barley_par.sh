@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_dsample_method_SG1solar_v1
+#$ -N matlab_par_dsample_method_SG2solar_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
