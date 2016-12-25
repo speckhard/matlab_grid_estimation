@@ -17,7 +17,7 @@ isempty(gcp('nocreate'))
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
 data_limits = 'W10..BV525610';% 525610';%'W10..BV525610';%'W10..KH525610';
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt_solar.csv', ...
     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
@@ -88,6 +88,7 @@ for i = 1:numel(deriv_step_size_vec)
         two_branch_sdr_mat(j,i) = two_branch_node_SDR;
         three_branch_sdr_mat(j,i) = three_branch_node_SDR;
         MI_matrices(:,:,MI_mat_counter) = MI_mat;
+        MI_mat_counter = MI_mat_counter +1;
         
     end
 end
@@ -109,7 +110,7 @@ value6 = deriv_step_size_vec;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG_vary_deriv_12_24_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_solar_vary_deriv_12_24_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
