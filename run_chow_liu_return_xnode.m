@@ -68,7 +68,9 @@ end
 % If the entropy_flag is the string gaussian in lower case, proceed to
 % model the data as guassian to find the MI.
 if strcmp(MI_flag, 'gaussian')
-    
+    % There's an error using the uint16 type matrix to run matlab's cov()
+    % function. So let's convert the matrix back to a double. 
+    Node_Volt_Matrix = double(Node_Volt_Matrix);
     %% Find the entropy of each node, H(i).
     tic
     find_single_node_entropy = @single_node_entropy_vmag_only;
