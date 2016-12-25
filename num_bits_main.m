@@ -1,14 +1,14 @@
-% %% Initialize Parallel Cluster Environment
-% cluster = parcluster('local')
-% tmpdirforpool = tempname
-% mkdir(tmpdirforpool)
-% cluster.JobStorageLocation = tmpdirforpool
-% 
-% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-% cluster.NumWorkers = str2num(getenv('NSLOTS'))
-% 
-% parpool(cluster)
-% isempty(gcp('nocreate'))
+%% Initialize Parallel Cluster Environment
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -17,8 +17,8 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
 data_limits = 'W10..BV525610';% 525610';%'W10..BV525610';%'W10..KH525610';
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
-    9,22,data_limits);
+% node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
+%     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
