@@ -45,5 +45,5 @@ parfor j = 1:loop_end
 end
 
 MI_matrix = reshape(MI_matrix_lin, iterations);
-disp('time to find the JVHW MI')
+disp('time to find the lin par JVHW MI')
 toc
