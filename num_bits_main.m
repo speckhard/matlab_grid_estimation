@@ -54,17 +54,17 @@ true_branch_data = remove_useless_branches(true_branch_data);
 
 %% Consider Sig Dig
 num_bits_vec = [4 6 8 10 12 14 16];
-sdr_mat = zeros(3, numel(deriv_step_size_vec));
-leaf_sdr_mat = zeros(3, numel(deriv_step_size_vec));
-two_branch_sdr_mat = zeros(3, numel(deriv_step_size_vec));
-three_branch_sdr_mat = zeros(3, numel(deriv_step_size_vec));
+sdr_mat = zeros(3, numel(num_bits_vec));
+leaf_sdr_mat = zeros(3, numel(num_bits_vec));
+two_branch_sdr_mat = zeros(3, numel(num_bits_vec));
+three_branch_sdr_mat = zeros(3, numel(num_bits_vec));
 compute_sdr = @run_chow_return_xnode;
 MI_mat_counter = 1;
 num_MI_methods = 3;
 num_nodes = numel(node_volt_matrix(1,:));
-MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods*numel(deriv_step_size_vec));
+MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods*numel(num_bits_vec));
 
-for i = 1:numel(deriv_step_size_vec)
+for i = 1:numel(num_bits_vec)
     for j = 1:num_MI_methods
         num_bits = num_bits_vec(i);
         if j == 1
@@ -109,7 +109,7 @@ value6 = num_bits;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_num_bits_12_24_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG1_deriv_num_bits_12_24_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
