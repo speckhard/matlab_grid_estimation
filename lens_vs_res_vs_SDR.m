@@ -22,14 +22,14 @@ isempty(gcp('nocreate'))
 data_limits = 'W10..KH525610';%'W10..BV525610';%'W10..KH525610';
 % node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_node_volt.csv', ...
 %     9,22,data_limits);
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
+node_volt_matrix = csvread('/farmshare/user_data/dts//SG2_data_solar_1min.csv',...
    9,22, data_limits);
 % node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt_solar.csv',...
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
 data_limits = 'A1..B271';%'A1..B51';%'A1..B271';
-true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_list.csv',...
     0,0, data_limits);
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
 %     0,0, data_limits);
@@ -73,6 +73,13 @@ three_branch_mean_sdr_mat = zeros(numel(downsample_vec),...
     numel(lens_size_vec),num_MI_methods);
 three_branch_std_sdr_mat = zeros(numel(downsample_vec),...
     numel(lens_size_vec),num_MI_methods);
+MI_mat_counter = 1;
+num_MI_methods = 3;
+num_nodes = numel(node_volt_matrix(1,:));
+MI_matrices = zeros(num_nodes,num_nodes, ...
+    num_MI_methods*numel(lens_size_vec)*numel(downsample_vec));
+est_branches_mat = zeros(num_nodes-1, 2, ...
+    num_MI_methods*numel(lens_size_vec)*numel(downsample_vec));
 
 for i = 1:numel(downsample_vec);
     node_volt_mat_downsampled = downsample_v(node_volt_matrix, ...
@@ -120,6 +127,9 @@ for i = 1:numel(downsample_vec);
                     temp_leaf_sdr_mat(k,l) = leaf_node_SDR;
                     temp_2branch_sdr_mat(k,l) = two_branch_node_SDR;
                     temp_3branch_sdr_mat(k,l) = three_branch_node_SDR;
+                    MI_matrices(:,:,MI_counter) = MI_mat;
+                    est_branches_mat(:,:,MI_counter) = ...
+                        estimated_branch_list;
                 end        
             end
             mean_sdr_mat(i,j,:) = mean(temp_sdr_mat,1);
@@ -144,6 +154,8 @@ field7 = 'three_branch_mean_sdr';
 field8 = 'three_branch_std_sdr';
 field9 = 'downsample_vec';
 field10 = 'lens_vec';
+field11 = 'MI_matrices';
+field12 = 'est_branches_mat';
 value1 = mean_sdr_mat;
 value2 = std_sdr_mat;
 value3 = leaf_mean_sdr_mat;
@@ -154,12 +166,15 @@ value7 = three_branch_mean_sdr_mat;
 value8 = three_branch_std_sdr_mat;
 value9 = downsample_vec;
 value10 = lens_size_vec;
+value11 = MI_matrices;
+value12 = est_branches_mat;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
-    field8, value8, field9, value9, field10, value10);
+    field8, value8, field9, value9, field10, value10, field11, value11, ...
+    field12, value12);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2_solar_deriv_lens_res_barley_12_23_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/LensRes/SG2_solar_deriv_lens_res_barley_12_30_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
