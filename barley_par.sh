@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_noise_SG1_test
+#$ -N matlab_par_noise_SG1_test2
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
