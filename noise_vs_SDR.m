@@ -47,7 +47,7 @@ true_branch_data = remove_useless_branches(true_branch_data);
 %% Add Noise to Data
 percent_noise_vec = 1/100*[10^-4, 10^-3.5, 10^-3, 10^-2.5];
 num_MI_methods = 3;
-num_reps = 1; % Number of repititions to add noise.
+num_reps = 20; % Number of repititions to add noise.
 sdr_mat = zeros(numel(percent_noise_vec),num_reps,num_MI_methods);
 leaf_sdr_mat = zeros(numel(percent_noise_vec),num_reps,num_MI_methods);
 two_branch_sdr_mat = ...
