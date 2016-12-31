@@ -2,6 +2,7 @@ function digitized_mat = digitize_sig(input_matrix, bits, global_min, ...
     global_max)
 
 tic
+bits
 % Check to see if we should use the local or the global min
 if strcmp(global_min, 'local')    
     % Set the global min to the local min.

@@ -58,7 +58,7 @@ end
 %% Digitize the input if num_bits flag set. 
 if strcmp(num_bits,'no discretization') ~= 1
     if isinteger(int8(num_bits)) ~= 1
-        error('Num Bits (the last arg) is not an integer below 255')
+        error('Num Bits (the 3rd last arg) is not an integer below 255')
     end
     digitizer = @digitize_sig; % Import the digitizer
     Node_Volt_Matrix = digitizer(Node_Volt_Matrix, ...
@@ -70,7 +70,8 @@ end
 if strcmp(MI_flag, 'gaussian')
     % There's an error using the uint16 type matrix to run matlab's cov()
     % function. So let's convert the matrix back to a double. 
-    Node_Volt_Matrix = double(Node_Volt_Matrix);
+    %Node_Volt_Matrix = double(Node_Volt_Matrix); %only needed for num bits
+    % vs SDR. 
     %% Find the entropy of each node, H(i).
     tic
     find_single_node_entropy = @single_node_entropy_vmag_only;
