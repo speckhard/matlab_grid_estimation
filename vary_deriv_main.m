@@ -53,7 +53,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data); 
 
 %% Consider Sig Dig
-deriv_step_size_vec = [30 60];%[1 5 15 30 60];
+deriv_step_size_vec = [1 5 15 30 60];
 sdr_mat = zeros(3, numel(deriv_step_size_vec));
 leaf_sdr_mat = zeros(3, numel(deriv_step_size_vec));
 two_branch_sdr_mat = zeros(3, numel(deriv_step_size_vec));
@@ -65,7 +65,7 @@ num_nodes = numel(node_volt_matrix(1,:));
 MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods...
     *numel(deriv_step_size_vec));
 err_freq_mat = zeros( ...
-    num_nodes,...
+    num_nodes,numel(deriv_step_size_vec),...
     num_MI_methods);
 find_wrong_branches = @incorrect_branches;
 gen_err_list = @err_node_list;
@@ -97,9 +97,9 @@ for i = 1:numel(deriv_step_size_vec)
         MI_mat_counter = MI_mat_counter +1;
         incorrect_branch_mat = find_wrong_branches(...
             true_branch_data, estimated_branch_list);
-        err_freq_mat(:,j) = gen_err_list(...
+        err_freq_mat(:,i,j) = gen_err_list(...
             num_nodes, incorrect_branch_mat,...
-            err_freq_mat(:,j));
+            err_freq_mat(:,i,j));
         
     end
 end
@@ -123,7 +123,7 @@ value7 = err_freq_mat;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/var_deriv/SG2_solar_vary_deriv_12_31_v2'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/var_deriv/SG2_solar_vary_deriv_12_31_v3'...
      ,'results')
 %  %% Close Matlab Parallel Environment
 % delete(gcp('nocreate'))
