@@ -70,8 +70,13 @@ end
 if strcmp(MI_flag, 'gaussian')
     % There's an error using the uint16 type matrix to run matlab's cov()
     % function. So let's convert the matrix back to a double. 
-    %Node_Volt_Matrix = double(Node_Volt_Matrix); %only needed for num bits
-    % vs SDR. 
+    
+    % If running num bits vs SDR theres a strange error saying cov() in the
+    % entropy calculations, its a matlab function, can't be used on an
+    % integer matrix. So make sure the input matrix is type double. 
+    if strcmp(num_bits,'no discretization') ~= 1
+        Node_Volt_Matrix = double(Node_Volt_Matrix); 
+    end
     %% Find the entropy of each node, H(i).
     tic
     find_single_node_entropy = @single_node_entropy_vmag_only;
