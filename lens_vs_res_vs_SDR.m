@@ -1,16 +1,16 @@
 % Scirpt to find the x node SDR and regular SDR for different lenses of
 % data and different first type downsampling resoltions.
-%% Initialize Parallel Cluster Environment
-cluster = parcluster('local')
-tmpdirforpool = tempname
-mkdir(tmpdirforpool)
-cluster.JobStorageLocation = tmpdirforpool
-
-msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-cluster.NumWorkers = str2num(getenv('NSLOTS'))
-
-parpool(cluster)
-isempty(gcp('nocreate'))
+% %% Initialize Parallel Cluster Environment
+% cluster = parcluster('local')
+% tmpdirforpool = tempname
+% mkdir(tmpdirforpool)
+% cluster.JobStorageLocation = tmpdirforpool
+% 
+% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+% cluster.NumWorkers = str2num(getenv('NSLOTS'))
+% 
+% parpool(cluster)
+% isempty(gcp('nocreate'))
 
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
@@ -19,17 +19,17 @@ isempty(gcp('nocreate'))
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..BV525610';%'W10..BV525610';%'W10..KH525610';
+data_limits = 'W10..BV8760';%'W10..BV525610';%'W10..KH525610';
 % node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_node_volt.csv', ...
 %     9,22,data_limits);
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt_solar.csv',...
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv',...
    9,22, data_limits);
 % node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt_solar.csv',...
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
-data_limits = 'A1..B271';%'A1..B51';%'A1..B271';
-true_branch_data = csvread('/farmshare/user_data/dts/SG1_true_branch_list.csv',...
+data_limits = 'A1..B51';%'A1..B51';%'A1..B271';
+true_branch_data = csvread('/farmshare/user_data/dts/SG1_true_branch_data.csv',...
     0,0, data_limits);
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
 %     0,0, data_limits);
@@ -54,7 +54,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1, 5, 15, 30, 60];
-lens_size_vec = 24*60*[1 4 7 14 30 60 90 180 364];
+lens_size_vec = 24*60*[1 4, 7 14 30 60 90 120 180 260 364];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -76,10 +76,11 @@ three_branch_std_sdr_mat = zeros(numel(downsample_vec),...
 MI_mat_counter = 1;
 num_MI_methods = 3;
 num_nodes = numel(node_volt_matrix(1,:));
-MI_matrices = zeros(num_nodes,num_nodes, ...
-    num_MI_methods*numel(lens_size_vec)*numel(downsample_vec));
-est_branches_mat = zeros(num_nodes-1, 2, ...
-    num_MI_methods*numel(lens_size_vec)*numel(downsample_vec));
+est_freq_mat = zeros(numel(downsample_vec), numel(lens_size_vec), ...
+    num_nodes,...
+    num_MI_methods);
+find_wrong_branches = @incorrect_branches;
+gen_err_list = @err_node_list;
 
 for i = 1:numel(downsample_vec);
     node_volt_mat_downsampled = downsample_v(node_volt_matrix, ...
@@ -99,6 +100,8 @@ for i = 1:numel(downsample_vec);
             temp_leaf_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_2branch_sdr_mat = zeros(num_of_lenses, num_MI_methods);
             temp_3branch_sdr_mat = zeros( num_of_lenses, num_MI_methods);
+            
+            temp_err_freq_mat = zeros(num_nodes, num_MI_methods);
             
             for k = 1:num_of_lenses
                 node_volt_mat_lens = ...
@@ -120,16 +123,18 @@ for i = 1:numel(downsample_vec);
                         two_branch_node_SDR, three_branch_node_SDR] = ...
                         run_chow_liu(node_volt_mat_lens, ...
                         true_branch_data, MI_method, 'no deriv', ...
-                        num_bits, 'no sig dig', 'null');
+                        'no vary deriv', num_bits, 'no sig dig', 'null');
                     sdr
                     leaf_node_SDR
                     temp_sdr_mat(k,l) = sdr;
                     temp_leaf_sdr_mat(k,l) = leaf_node_SDR;
                     temp_2branch_sdr_mat(k,l) = two_branch_node_SDR;
                     temp_3branch_sdr_mat(k,l) = three_branch_node_SDR;
-                    MI_matrices(:,:,MI_counter) = MI_mat;
-                    est_branches_mat(:,:,MI_counter) = ...
-                        estimated_branch_list;
+                    incorrect_branch_mat = find_wrong_branches(...
+                        true_branch_data, estimated_branch_list);
+                    temp_err_freq_mat(:,l) = gen_err_list(...
+                        num_nodes, incorrect_branch_mat,...
+                        temp_err_freq_mat(:,l));
                 end        
             end
             mean_sdr_mat(i,j,:) = mean(temp_sdr_mat,1);
@@ -140,6 +145,7 @@ for i = 1:numel(downsample_vec);
             two_branch_std_sdr_mat(i,j,:) = std(temp_2branch_sdr_mat,1,1);
             three_branch_mean_sdr_mat(i,j,:) = mean(temp_3branch_sdr_mat,1);
             three_branch_std_sdr_mat(i,j,:) = std(temp_3branch_sdr_mat,1,1);
+            err_freq_mat(i,j,:,:) = temp_err_freq_mat./num_of_lenses;
         end        
 end
 
@@ -154,8 +160,7 @@ field7 = 'three_branch_mean_sdr';
 field8 = 'three_branch_std_sdr';
 field9 = 'downsample_vec';
 field10 = 'lens_vec';
-field11 = 'MI_matrices';
-field12 = 'est_branches_mat';
+field11 = 'est_freq_mat';
 value1 = mean_sdr_mat;
 value2 = std_sdr_mat;
 value3 = leaf_mean_sdr_mat;
@@ -166,15 +171,13 @@ value7 = three_branch_mean_sdr_mat;
 value8 = three_branch_std_sdr_mat;
 value9 = downsample_vec;
 value10 = lens_size_vec;
-value11 = MI_matrices;
-value12 = est_branches_mat;
+value11 = err_freq_mat;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
-    field8, value8, field9, value9, field10, value10, field11, value11, ...
-    field12, value12);
+    field8, value8, field9, value9, field10, value10, field11, value11);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/LensRes/SG1_solar_deriv_lens_res_barley_12_30_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/LensRes/SG1_deriv_lens_res_barley_12_30_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
