@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_lens_res_SG1_1231_v1
+#$ -N matlab_par_lens_res_SG1_1231_v3
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa

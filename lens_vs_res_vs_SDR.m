@@ -76,7 +76,7 @@ three_branch_std_sdr_mat = zeros(numel(downsample_vec),...
 MI_mat_counter = 1;
 num_MI_methods = 3;
 num_nodes = numel(node_volt_matrix(1,:));
-est_freq_mat = zeros(numel(downsample_vec), numel(lens_size_vec), ...
+err_freq_mat = zeros(numel(downsample_vec), numel(lens_size_vec), ...
     num_nodes,...
     num_MI_methods);
 find_wrong_branches = @incorrect_branches;
@@ -160,7 +160,7 @@ field7 = 'three_branch_mean_sdr';
 field8 = 'three_branch_std_sdr';
 field9 = 'downsample_vec';
 field10 = 'lens_vec';
-field11 = 'est_freq_mat';
+field11 = 'err_freq_mat';
 value1 = mean_sdr_mat;
 value2 = std_sdr_mat;
 value3 = leaf_mean_sdr_mat;
