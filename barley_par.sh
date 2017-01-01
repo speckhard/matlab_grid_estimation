@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_num_bits_SG1_1231_v4
+#$ -N matlab_par_num_bits_SG1_solar_1231_v5
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
