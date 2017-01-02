@@ -1,16 +1,16 @@
-% Scirpt to find the x node SDR and regular SDR for different lenses of
-% data and different first type downsampling resoltions.
-% %% Initialize Parallel Cluster Environment
-% cluster = parcluster('local')
-% tmpdirforpool = tempname
-% mkdir(tmpdirforpool)
-% cluster.JobStorageLocation = tmpdirforpool
-% 
-% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-% cluster.NumWorkers = str2num(getenv('NSLOTS'))
-% 
-% parpool(cluster)
-% isempty(gcp('nocreate'))
+Scirpt to find the x node SDR and regular SDR for different lenses of
+data and different first type downsampling resoltions.
+%% Initialize Parallel Cluster Environment
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
@@ -92,10 +92,8 @@ for i = 1:numel(downsample_vec);
             
             if lens_size ~= floor(lens_size)
                 error('non-integer lens/res combo')
-            end
-            
+            end           
             num_of_lenses = floor((num_mins)/lens_size);
-
             temp_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_leaf_sdr_mat = zeros( num_of_lenses, num_MI_methods);
             temp_2branch_sdr_mat = zeros(num_of_lenses, num_MI_methods);
@@ -177,7 +175,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8, field9, value9, field10, value10, field11, value11);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/LensRes/SG2_deriv_lens_res_barley_12_31_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/LensRes/SG2_deriv_lens_res_barley_010117_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
