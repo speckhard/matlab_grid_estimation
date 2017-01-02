@@ -16,8 +16,8 @@ isempty(gcp('nocreate'))
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..BV525610';% 525610';%'W10..BV525610';%'W10..KH525610';
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
+data_limits = 'W10..KH525610';% 525610';%'W10..BV525610';%'W10..KH525610';
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
@@ -27,8 +27,8 @@ node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
-data_limits = 'A1..B51';%'A1..B51';%'A1..B271';
-true_branch_data = csvread('/farmshare/user_data/dts/SG1_true_branch_data.csv',...
+data_limits = 'A1..B271';%'A1..B51';%'A1..B271';
+true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
     0,0, data_limits);
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
 %     0,0, data_limits);
@@ -158,7 +158,7 @@ value6 = std_two_branch_sdr_mat;
 value7 = mean_three_branch_sdr_mat;
 value8 = std_three_branch_sdr_mat;
 value9 = MI_matrices;
-value10 = num_bits;
+value10 = num_bits_vec;
 value11 = err_freq_mat;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
@@ -166,7 +166,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG1_deriv_num_bits_12_31_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_12_31_v1'...
     ,'results')
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
