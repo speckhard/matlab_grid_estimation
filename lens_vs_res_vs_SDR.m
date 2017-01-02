@@ -143,7 +143,7 @@ for i = 1:numel(downsample_vec);
             two_branch_std_sdr_mat(i,j,:) = std(temp_2branch_sdr_mat,1,1);
             three_branch_mean_sdr_mat(i,j,:) = mean(temp_3branch_sdr_mat,1);
             three_branch_std_sdr_mat(i,j,:) = std(temp_3branch_sdr_mat,1,1);
-            err_freq_mat(i,j,:,:) = temp_err_freq_mat./num_of_lenses;
+            err_freq_mat(:,i,j,:) = temp_err_freq_mat./num_of_lenses;
         end        
 end
 
