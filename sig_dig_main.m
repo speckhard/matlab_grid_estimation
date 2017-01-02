@@ -1,14 +1,14 @@
-% %% Initialize Parallel Cluster Environment
-% cluster = parcluster('local')
-% tmpdirforpool = tempname
-% mkdir(tmpdirforpool)
-% cluster.JobStorageLocation = tmpdirforpool
-% 
-% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-% cluster.NumWorkers = str2num(getenv('NSLOTS'))
-% 
-% parpool(cluster)
-% isempty(gcp('nocreate'))
+%% Initialize Parallel Cluster Environment
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -54,8 +54,8 @@ true_branch_data = remove_useless_branches(true_branch_data);
 
 %% Consider Sig Dig
 sig_dig_round = @sig_dig;
-sig_dig_vec = [1E0, 1E1, 1E2 , 1E3];
-round_vec = [0, 1, 2, 3]; 
+sig_dig_vec = [1E0, 1E1, 1E2 , 1E3, 1E4, 1E5];
+round_vec = [0, 1, 2, 3, 4, 5]; 
 sdr_mat = zeros(3, numel(sig_dig_vec));
 leaf_sdr_mat = zeros(3, numel(sig_dig_vec));
 two_branch_sdr_mat = zeros(3, numel(sig_dig_vec));
