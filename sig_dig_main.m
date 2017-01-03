@@ -54,8 +54,8 @@ true_branch_data = remove_useless_branches(true_branch_data);
 
 %% Consider Sig Dig
 sig_dig_round = @sig_dig;
-sig_dig_vec = [1E0, 1E1, 1E2 , 1E3, 1E4, 1E5];
-round_vec = [0, 1, 2, 3, 4, 5]; 
+sig_dig_vec = [1E0, 1E1, 1E2 , 1E3, 1E4, 1E5, 1E6, 1E7, 1E8, 1E9];
+round_vec = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; 
 sdr_mat = zeros(3, numel(sig_dig_vec));
 leaf_sdr_mat = zeros(3, numel(sig_dig_vec));
 two_branch_sdr_mat = zeros(3, numel(sig_dig_vec));
@@ -135,7 +135,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7,...
     field8, value8);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2solar_deriv_sig_digs_12_31_v2'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2solar_deriv_sig_digs_1_3_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
