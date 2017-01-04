@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_lens_SG2solar_010317_v1
+#$ -N matlab_par_res_SG2solar_010317_v1
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
