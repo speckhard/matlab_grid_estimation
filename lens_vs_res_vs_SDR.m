@@ -53,8 +53,8 @@ collapse_data = @collapse_redundant_data;
 remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
-downsample_vec = [1 5 15 30 60];
-lens_size_vec = 24*60*364%[1 4, 7 14 30 60 90 120 180 260 364];
+downsample_vec = [1] %5 15 30 60];
+lens_size_vec = 24*60*[1 4, 7 14 30 60 90 120 180 260 364];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -175,7 +175,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8, field9, value9, field10, value10, field11, value11);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/lens_res/SG2_solar_deriv_res_barley_010417_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/lens_res/SG2_solar_deriv_lens_barley_010417_v1'...
      ,'results')
  %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
