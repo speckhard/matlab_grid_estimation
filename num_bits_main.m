@@ -65,7 +65,7 @@ mean_three_branch_sdr_mat = zeros(3, numel(num_bits_vec));
 std_three_branch_sdr_mat = zeros(3, numel(num_bits_vec));
 compute_sdr = @run_chow_return_xnode;
 MI_mat_counter = 1;
-num_MI_methods = 2;
+num_MI_methods = 3;
 num_nodes = numel(node_volt_matrix(1,:));
 MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods*numel(num_bits_vec));
 err_freq_mat = zeros(num_nodes, numel(num_bits_vec), num_MI_methods);
@@ -95,7 +95,7 @@ for i = 1:numel(num_bits_vec)
             node_volt_mat_lens = ...
                 node_volt_matrix((k-1)*lens_size+1:...
                 k*lens_size,:);
-            for l = 1:num_MI_methods
+            for l = 3:3%1:num_MI_methods
                 if l == 1
                     MI_method = 'gaussian';
                 elseif l ==2
@@ -166,7 +166,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_solar_deriv_num_bits_1_27_JVHW_G_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_solar_deriv_num_bits_1_27_Discrete_v1'...
     ,'results')
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
