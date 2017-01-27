@@ -54,7 +54,7 @@ true_branch_data = remove_useless_branches(true_branch_data);
 
 %% Consider Sig Dig
 num_bits_vec = [4 6 8 10 12 14 16];
-lens_size_vec = 24*60*[364];
+lens_size_vec = 24*60*[120];
 mean_sdr_mat = zeros(3, numel(num_bits_vec));
 std_sdr_mat = zeros(3, numel(num_bits_vec));
 mean_leaf_sdr_mat = zeros(3, numel(num_bits_vec));
@@ -166,7 +166,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_solar_deriv_num_bits_1_27_Discrete_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_solar_deriv_num_bits_lens_1_27_Discrete_v1'...
     ,'results')
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
