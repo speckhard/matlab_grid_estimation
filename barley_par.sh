@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-#$ -N matlab_par_num_bits_lens_MI_D_SG2_012917_v1
+#$ -N matlab_par_num_bits_lens_MI_D_SG2_012917_v2
 #$ -cwd
 #$ -M dts@stanford.edu
 #$ -m besa
