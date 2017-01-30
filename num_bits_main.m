@@ -52,7 +52,8 @@ collapse_data = @collapse_redundant_data;
 remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 
-%% Consider Sig Dig
+disp('here')
+%% Consider Num Bits Vec
 num_bits_vec = [4 6 8 10 12 14 16];
 lens_size_vec = 24*60*[120];
 mean_sdr_mat = zeros(3, numel(num_bits_vec));
@@ -73,18 +74,18 @@ find_wrong_branches = @incorrect_branches;
 gen_err_list = @err_node_list;
 
 for i = 1:numel(num_bits_vec)
-    num_bits = num_bits_vec(i);
+    num_bits = num_bits_vec(i)
     
     for j = 1:numel(lens_size_vec)
         num_mins = numel(node_volt_matrix(:,1));
-        lens_size = lens_size_vec(j);
+        lens_size = lens_size_vec(j)
         
         if lens_size ~= floor(lens_size)
             error('non-integer lens/res combo')
         end
         
         temp_err_freq_mat = zeros(num_nodes, num_MI_methods);
-        num_of_lenses = floor((num_mins)/lens_size);
+        num_of_lenses = floor((num_mins)/lens_size)
         
         temp_sdr_mat = zeros( num_of_lenses, num_MI_methods);
         temp_leaf_sdr_mat = zeros( num_of_lenses, num_MI_methods);
@@ -166,7 +167,8 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_1_29_Discrete_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_1_29_Discrete_v2'...
     ,'results')
+
 %% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
