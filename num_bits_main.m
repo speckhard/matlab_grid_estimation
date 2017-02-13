@@ -1,14 +1,14 @@
 %% Initialize Parallel Cluster Environment
-cluster = parcluster('local')
-tmpdirforpool = tempname
-mkdir(tmpdirforpool)
-cluster.JobStorageLocation = tmpdirforpool
-
-msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-cluster.NumWorkers = str2num(getenv('NSLOTS'))
-
-parpool(cluster)
-isempty(gcp('nocreate'))
+% cluster = parcluster('local')
+% tmpdirforpool = tempname
+% mkdir(tmpdirforpool)
+% cluster.JobStorageLocation = tmpdirforpool
+% 
+% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+% cluster.NumWorkers = str2num(getenv('NSLOTS'))
+% 
+% parpool(cluster)
+% isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -77,7 +77,7 @@ for i = 1:numel(num_bits_vec)
     num_bits = num_bits_vec(i)
     
     for j = 1:numel(lens_size_vec)
-        num_mins = numel(node_volt_matrix(:,1));
+        num_mins = 525600; %% numel(node_volt_matrix(:,1));
         lens_size = lens_size_vec(j)
         
         if lens_size ~= floor(lens_size)
@@ -93,10 +93,22 @@ for i = 1:numel(num_bits_vec)
         temp_3branch_sdr_mat = zeros( num_of_lenses, num_MI_methods);
         
         for k = 1:num_of_lenses
-            node_volt_mat_lens = ...
-                node_volt_matrix((k-1)*lens_size+1:...
-                k*lens_size,:);
-            for l = 3:3% 1:num_MI_methods
+            
+            if k == 1
+                
+                data_limits = 'W10..KH175210';% 525610';%'W10..BV525610';%'W10..KH525610';
+                node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
+                9,22,data_limits);
+            elseif k ==2 
+                data_limits = 'W175210..KH350410'  
+                                node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
+                9,22,data_limits);
+            elseif k ==3
+                data_limits = 'W350410..KH525610' 
+%             node_volt_mat_lens = ...
+%                 node_volt_matrix((k-1)*lens_size+1:...
+%                 k*lens_size,:);
+            for l = 1:1% 1:num_MI_methods
                 if l == 1
                     MI_method = 'gaussian';
                 elseif l ==2
@@ -167,7 +179,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_2_10_D_only_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_2_12_G_only_v3'...
     ,'results')
 
 %% Close Matlab Parallel Environment
