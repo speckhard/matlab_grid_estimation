@@ -99,14 +99,14 @@ for i = 1:numel(num_bits_vec)
             elseif k ==2 
                 data_limits = 'W175210..KH350410'  
                 node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
-                9,22,data_limits);            
+                175209,22,data_limits);            
             data_limits = 'A1..B271'
             true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
                 0,0, data_limits);
             elseif k ==3
                 data_limits = 'W350410..KH525610'
                 node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
-                    9,22,data_limits);
+                    350409,22,data_limits);
                 data_limits = 'A1..B271'
                 true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
                     0,0, data_limits);
