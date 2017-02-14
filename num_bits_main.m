@@ -1,14 +1,14 @@
 %% Initialize Parallel Cluster Environment
-% cluster = parcluster('local')
-% tmpdirforpool = tempname
-% mkdir(tmpdirforpool)
-% cluster.JobStorageLocation = tmpdirforpool
-% 
-% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-% cluster.NumWorkers = str2num(getenv('NSLOTS'))
-% 
-% parpool(cluster)
-% isempty(gcp('nocreate'))
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -16,9 +16,9 @@
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..KH525610';% 525610';%'W10..BV525610';%'W10..KH525610';
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
-    9,22,data_limits);
+% data_limits = 'W10..KH525610';% 525610';%'W10..BV525610';%'W10..KH525610';
+% node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
+%     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv',...
 %    9,22, data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
@@ -27,12 +27,13 @@ node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ..
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
-data_limits = 'A1..B271';%'A1..B51';%'A1..B271';
-true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
-    0,0, data_limits);
+;%'A1..B51';%'A1..B271';
+% true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
+%     0,0, data_limits);
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
 %     0,0, data_limits);
-% true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
+% data_limits = 'A1..B271'
+% true_branch_data = csvread('/Users/Dboy/Documents/Stanny/Rajagopal/Python/True_branch_list.csv',...
 %     0,0, data_limits);
 %true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
 %true_branch_data = SGTrueBranchesData;
@@ -44,13 +45,6 @@ true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',.
 % true_branch_data = mpc_base.branch(2:end,1:2);
 % true_branch_data = true_branch_data -1;
 
-%% Remove redundant nodes from the dataset.
-collapse_data = @collapse_redundant_data;
-[node_volt_matrix, true_branch_data] = ...
-    collapse_data(node_volt_matrix, true_branch_data);
-%% Remove Redundant Branches
-remove_useless_branches = @remove_redundant_branches;
-true_branch_data = remove_useless_branches(true_branch_data);
 
 disp('here')
 %% Consider Num Bits Vec
@@ -67,7 +61,7 @@ std_three_branch_sdr_mat = zeros(3, numel(num_bits_vec));
 compute_sdr = @run_chow_return_xnode;
 MI_mat_counter = 1;
 num_MI_methods = 3;
-num_nodes = numel(node_volt_matrix(1,:));
+num_nodes = 220; %numel(node_volt_matrix(1,:));
 MI_matrices = zeros(num_nodes,num_nodes, num_MI_methods*numel(num_bits_vec));
 err_freq_mat = zeros(num_nodes, numel(num_bits_vec), num_MI_methods);
 find_wrong_branches = @incorrect_branches;
@@ -97,14 +91,26 @@ for i = 1:numel(num_bits_vec)
             if k == 1
                 
                 data_limits = 'W10..KH175210';% 525610';%'W10..BV525610';%'W10..KH525610';
-                node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
+                node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv', ...
                 9,22,data_limits);
+                data_limits = 'A1..B271'
+                true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
+                    0,0, data_limits);
             elseif k ==2 
                 data_limits = 'W175210..KH350410'  
-                                node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
-                9,22,data_limits);
+                node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv', ...
+                9,22,data_limits);            
+                data_limits = 'A1..B271'
+                true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
+                     0,0, data_limits);
             elseif k ==3
                 data_limits = 'W350410..KH525610' 
+                node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Downloads/SG2_data_solar_1min.csv', ...
+                9,22,data_limits);
+                data_limits = 'A1..B271'
+                true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
+                     0,0, data_limits);
+            end
 %             node_volt_mat_lens = ...
 %                 node_volt_matrix((k-1)*lens_size+1:...
 %                 k*lens_size,:);
@@ -120,7 +126,7 @@ for i = 1:numel(num_bits_vec)
                 compute_sdr = @run_chow_liu_return_xnode;
                 [sdr, estimated_branch_list, MI_mat, leaf_node_SDR, ...
                     two_branch_node_SDR, three_branch_node_SDR]= ...
-                    compute_sdr(node_volt_mat_lens,true_branch_data, ...
+                    compute_sdr(node_volt_matrix,true_branch_data, ...
                     MI_method,'deriv', 'no variable deriv step', ...
                     num_bits, 'use all digits', 'no sig dig');
                 
@@ -179,7 +185,7 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field7, value7, field8, value8, field9, value9, ...
     field10, value10, field11, value11);
 %% Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_2_12_G_only_v3'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG2_deriv_num_bits_lens_2_12_G_only_v4_corn'...
     ,'results')
 
 %% Close Matlab Parallel Environment
