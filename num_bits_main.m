@@ -1,14 +1,14 @@
 %% Initialize Parallel Cluster Environment
-cluster = parcluster('local')
-tmpdirforpool = tempname
-mkdir(tmpdirforpool)
-cluster.JobStorageLocation = tmpdirforpool
-
-msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-cluster.NumWorkers = str2num(getenv('NSLOTS'))
-
-parpool(cluster)
-isempty(gcp('nocreate'))
+% cluster = parcluster('local')
+% tmpdirforpool = tempname
+% mkdir(tmpdirforpool)
+% cluster.JobStorageLocation = tmpdirforpool
+% 
+% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+% cluster.NumWorkers = str2num(getenv('NSLOTS'))
+% 
+% parpool(cluster)
+% isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -100,17 +100,25 @@ for i = 1:numel(num_bits_vec)
                 data_limits = 'W175210..KH350410'  
                 node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
                 9,22,data_limits);            
-                data_limits = 'A1..B271'
-                true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
-                     0,0, data_limits);
+            data_limits = 'A1..B271'
+            true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
+                0,0, data_limits);
             elseif k ==3
-                data_limits = 'W350410..KH525610' 
+                data_limits = 'W350410..KH525610'
                 node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv', ...
-                9,22,data_limits);
+                    9,22,data_limits);
                 data_limits = 'A1..B271'
                 true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
-                     0,0, data_limits);
+                    0,0, data_limits);
             end
+            %% Remove redundant nodes from the dataset.
+            collapse_data = @collapse_redundant_data;
+            [node_volt_matrix, true_branch_data] = ...
+                collapse_data(node_volt_matrix, true_branch_data);
+            %% Remove Redundant Branches
+            remove_useless_branches = @remove_redundant_branches;
+            true_branch_data = remove_useless_branches(true_branch_data);
+
 %             node_volt_mat_lens = ...
 %                 node_volt_matrix((k-1)*lens_size+1:...
 %                 k*lens_size,:);
@@ -189,4 +197,4 @@ save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG
     ,'results')
 
 %% Close Matlab Parallel Environment
-delete(gcp('nocreate'))
+% delete(gcp('nocreate'))
