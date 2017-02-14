@@ -1,14 +1,14 @@
 %% Initialize Parallel Cluster Environment
-% cluster = parcluster('local')
-% tmpdirforpool = tempname
-% mkdir(tmpdirforpool)
-% cluster.JobStorageLocation = tmpdirforpool
-% 
-% msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
-% cluster.NumWorkers = str2num(getenv('NSLOTS'))
-% 
-% parpool(cluster)
-% isempty(gcp('nocreate'))
+cluster = parcluster('local')
+tmpdirforpool = tempname
+mkdir(tmpdirforpool)
+cluster.JobStorageLocation = tmpdirforpool
+
+msg = sprintf('setting matlabpool to %s', getenv('NSLOTS'))
+cluster.NumWorkers = str2num(getenv('NSLOTS'))
+
+parpool(cluster)
+isempty(gcp('nocreate'))
 %% Import Data to analyze 
 % First, copy the data minus the feeder bus
 % 60 min file has 8760 datapoints. End point 8770. 
@@ -197,4 +197,4 @@ save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/num_bits/SG
     ,'results')
 
 %% Close Matlab Parallel Environment
-% delete(gcp('nocreate'))
+delete(gcp('nocreate'))
