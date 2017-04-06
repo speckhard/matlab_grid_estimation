@@ -125,8 +125,10 @@ end
 
 %% Find Min Span Tree using Kruskal.m
 tic
-find_min_span_tree = @kruskal;
+find_min_span_tree = @kruskal; %@kruskal_gif_creator_v2;
+%mat_of_connectivity = find_min_span_tree(mutual_information_matrix, true_branch_pairs);
 mat_of_connectivity = find_min_span_tree(mutual_information_matrix);
+
 disp('time required to run Kruskal')
 toc
 
@@ -152,12 +154,16 @@ find_sdr = @findSDR;
 sdr_percent = SDR;
 
 %% Find the x node SDRs
-
-x_SDR = @x_node_SDR;
-leaf_node_SDR = x_SDR(mutual_information_matrix, true_branch_pairs, 1);
-two_branch_node_SDR = x_SDR(mutual_information_matrix, ...
-    true_branch_pairs, 2);
-three_branch_node_SDR = x_SDR(mutual_information_matrix, ...
-    true_branch_pairs, 3);
+leaf_node_SDR = 50;
+two_branch_node_SDR = 50;
+three_branch_node_SDR = 50;
+% x_SDR = @x_node_SDR;
+% % disp('size of mi matrix')
+% % disp(size(mutual_information_matrix))
+% leaf_node_SDR = x_SDR(mutual_information_matrix, true_branch_pairs, 1);
+% two_branch_node_SDR = x_SDR(mutual_information_matrix, ...
+%     true_branch_pairs, 2);
+% three_branch_node_SDR = x_SDR(mutual_information_matrix, ...
+%     true_branch_pairs, 3);
 
 end
