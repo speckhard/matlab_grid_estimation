@@ -1,5 +1,5 @@
-Scirpt to find the x node SDR and regular SDR for different lenses of
-data and different first type downsampling resoltions.
+% Scirpt to find the x node SDR and regular SDR for different lenses of
+% data and different first type downsampling resoltions.
 %% Initialize Parallel Cluster Environment
 cluster = parcluster('local')
 tmpdirforpool = tempname
@@ -20,10 +20,10 @@ isempty(gcp('nocreate'))
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
 data_limits = 'W10..KH525610';%'W10..BV525610';%'W10..KH525610';
-% node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_node_volt.csv', ...
-%     9,22,data_limits);
-node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv',...
-   9,22, data_limits);
+node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_node_volt.csv', ...
+    9,22,data_limits);
+% node_volt_matrix = csvread('/farmshare/user_data/dts/SG2_data_volt_1min.csv',...
+%    9,22, data_limits);
 % node_volt_matrix = csvread('/Users/Dboy/Downloads/SG_data_node_volt_solar.csv',...
 %    9,22, data_limits);
 %node_volt_matrix = SGdatasolar60min(:,1:52);
@@ -38,7 +38,7 @@ true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',.
 %true_branch_data = SandiaNationalLabTrueNodeData(1:51,:);
 %true_branch_data = SGTrueBranchesData;
 
-% For 123 Node Network
+% % For 123 Node Network
 % load('/Users/Dboy/Downloads/Node123_RandPF.mat')
 % % Remove the feeder node 
 % node_volt_matrix = v_vec(:,2:end);
@@ -54,7 +54,7 @@ remove_useless_branches = @remove_redundant_branches;
 true_branch_data = remove_useless_branches(true_branch_data);
 %% Downsample the data
 downsample_vec = [1] %5 15 30 60];
-lens_size_vec = 24*60*[1 4, 7 14 30 60 90 120 180 260 364];
+lens_size_vec = 24*60*[30 60 90 120 180 364];
 run_chow_liu = @run_chow_liu_return_xnode;
 num_MI_methods = 3;
 mean_sdr_mat = zeros(numel(downsample_vec),numel(lens_size_vec),...
@@ -74,7 +74,6 @@ three_branch_mean_sdr_mat = zeros(numel(downsample_vec),...
 three_branch_std_sdr_mat = zeros(numel(downsample_vec),...
     numel(lens_size_vec),num_MI_methods);
 MI_mat_counter = 1;
-num_MI_methods = 3;
 num_nodes = numel(node_volt_matrix(1,:));
 err_freq_mat = zeros(num_nodes, ...
     numel(downsample_vec), numel(lens_size_vec), ...
@@ -109,21 +108,22 @@ for i = 1:numel(downsample_vec);
                 for l = 1:num_MI_methods
                     if l == 1
                         num_bits = 'no discretization';
-                        MI_method = 'gaussian';
+                        MI_method = 'gaussian'
                     elseif l ==2
                         num_bits = 14;
-                        MI_method = 'JVHW';
+                        MI_method = 'JVHW'
                     elseif l == 3
                         num_bits = 14;
-                        MI_method = 'MLE';
+                        MI_method = 'MLE'
                     end
                     [sdr, estimated_branch_list, MI_mat, leaf_node_SDR, ...
                         two_branch_node_SDR, three_branch_node_SDR] = ...
                         run_chow_liu(node_volt_mat_lens, ...
                         true_branch_data, MI_method, 'no deriv', ...
                         'no vary deriv', num_bits, 'no sig dig', 'null');
+                    
                     sdr
-                    leaf_node_SDR
+                    leaf_node_SDR;
                     temp_sdr_mat(k,l) = sdr;
                     temp_leaf_sdr_mat(k,l) = leaf_node_SDR;
                     temp_2branch_sdr_mat(k,l) = two_branch_node_SDR;
@@ -175,7 +175,8 @@ results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7, ...
     field8, value8, field9, value9, field10, value10, field11, value11);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/lens_res/SG2_solar_deriv_lens_barley_010417_v1'...
-     ,'results')
- %% Close Matlab Parallel Environment
+ save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/lens_res/SG2_no_solar_deriv_lens_barley_040617_v1'...
+%      ,'results')
+%save('results')
+%% Close Matlab Parallel Environment
 delete(gcp('nocreate'))
