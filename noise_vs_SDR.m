@@ -16,7 +16,7 @@ isempty(gcp('nocreate'))
 % 1min file has 525600 datapoints. End point 525610
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant.
-data_limits = 'W10..BV525610'% 'W10..KH525610';
+data_limits = 'W10..BV525610';% 'W10..KH525610';
 % node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt.csv', ...
 %     9,22,data_limits);
 % node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
@@ -28,10 +28,10 @@ node_volt_matrix = csvread('/farmshare/user_data/dts/SG_data_node_volt_solar.csv
 
 %node_volt_matrix = SGdatasolar60min(:,1:52);
 % Second, copy the list of true branches.
-data_limits = 'A1..B51';%'A1..B51';%'A1..B271';
+data_limits = 'A1..B271';%'A1..B51';%'A1..B271';
 % true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
 %     0,0, data_limits);
-true_branch_data = csvread('/farmshare/user_data/dts/SG1_true_branch_data.csv',...
+true_branch_data = csvread('/farmshare/user_data/dts/SG2_true_branch_data.csv',...
     0,0, data_limits);
 % true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
 %     0,0, data_limits);
@@ -117,7 +117,7 @@ value7 = est_branches_mat;
 
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4, field5, value5, field6, value6, field7, value7)
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/noise/SG1_solar_noise_v1'...
+save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/noise/SG2_solar_noise_v1'...
      ,'results')
  %% Close Parpool session
 delete(gcp('nocreate'))

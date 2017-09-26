@@ -6,14 +6,16 @@
 % Column W corresponds to Node 1, Column KI corresponds to node 273. We
 % purposely leave out the feeder node since it's vmag value is not constant. 
 data_limits = 'W10..KH525610';
-node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
-   9,22, data_limits);
-% node_volt_matrix = v_vec(:,2:end);
+% node_volt_matrix = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG2_data_volt_1min.csv',...
+%    9,22, data_limits);
+node_volt_matrix = v_vec(:,2:end);
 %% Second, copy the list of true branches.
 data_limits = 'A1..B271';
-true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+% true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/R4_12_47_True_branch_list.csv',...
+%     0,0, data_limits);
+true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
     0,0, data_limits);
-% true_branch_data = squeeze(mpc_base.branch(:,1:2)-1);
+true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
 %% Remove redundant nodes from the dataset.
 collapse_data = @collapse_redundant_data;
 [node_volt_matrix, true_branch_data] = ...
@@ -35,7 +37,7 @@ est_branch_matrices = zeros(num_nodes-1,2,3);
 % Create a matrix to store MI_matrix. 
 MI_matrices = zeros(num_nodes,num_nodes,3);
 
-for i = 1:3
+for i = 1:1
     if i == 1
         MI_method = 'gaussian';
         num_bits = 'no discretization';
@@ -62,7 +64,7 @@ end
 %% Calculate Bin Size, before saving. 
 global_min = min(min(node_volt_matrix));
 global_max = max(max(node_volt_matrix));
-bin_size = (global_max-global_min)/(2^num_bits - 1);
+%bin_size = (global_max-global_min)/(2^num_bits - 1);
 %% Save Data
 % Create a structure to store analysis data. 
 field1 = 'sdr';
@@ -76,5 +78,5 @@ value4 = bin_size;
 results = struct(field1, value1, field2, value2, field3, value3,...
     field4, value4);
 % Save a .mat file.
-save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-1min-deriv_12_10-fixed272node-nodiscrete'...
-     ,'results')
+% save('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Results/SG2-1min-deriv_12_10-fixed272node-nodiscrete'...
+%      ,'results')

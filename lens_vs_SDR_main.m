@@ -1,5 +1,5 @@
 % Main file to find lens size vs SDR for all MI methods. 
-% Last edit: 12/3
+% Last edit: 12/12
 
 %% Setup data
 %% First, copy all of the Sandia data into a new matrix, avoid copying the

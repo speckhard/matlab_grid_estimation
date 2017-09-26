@@ -33,5 +33,7 @@ end
 
 % Remove the useless zero values at the end of the leaf node list
 leaf_node_list = leaf_node_list(1:leaf_counter-1);
+disp('the number of leaf nodes is')
+disp(numel(leaf_node_list))
         
         

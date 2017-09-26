@@ -1,6 +1,6 @@
 % Plot Lens vs Res vs SDR
 
-lens_vec = [1 4 7 14 30 60 90 180 364];
+lens_vec = [1 4 7 14 30 90];
 res_vec = [1 5 15 30 60];
 
 %% Gaussian plots
@@ -22,7 +22,7 @@ xlabel('Lens size (days)')
 subplot(5,4,2)
 errorbar(lens_vec, leaf_sdr_mat(1,:),leaf_std_mat(1,:))
 
-title({'SG-solar Gaussian Deriv Analysis, Lens vs Res';...
+title({'SG2-solar Gaussian Deriv Analysis, Lens vs Res';...
     'Leaf SDR'})
 %title('leaf SDR')
 
@@ -87,7 +87,7 @@ errorbar(lens_vec, three_branch_sdr_mat(5,:), three_branch_std_mat(5,:))
 
 %% JVHW plots
 % The JVHW peroforms worse for small lenses, we remove lens 1 and 4
-lens_vec = [7 14 30 60 90 180 364];
+lens_vec = [7 14 30 90];
 sdr_mat = results.mean_sdr_mat(:,3:end,2);
 std_sdr_mat = results.std_sdr_mat(:,3:end,2);
 leaf_sdr_mat = results.leaf_mean_sdr(:,3:end,2);
@@ -106,7 +106,7 @@ xlabel('Lens size (days)')
 subplot(5,4,2)
 errorbar(lens_vec, leaf_sdr_mat(1,:),leaf_std_mat(1,:))
 
-title({'SG-solar JVHW Deriv Analysis, Lens vs Res';...
+title({'SG2-solar JVHW Deriv Analysis, Lens vs Res';...
     'Leaf SDR'})
 %title('leaf SDR')
 
@@ -171,7 +171,7 @@ errorbar(lens_vec, three_branch_sdr_mat(5,:), three_branch_std_mat(5,:))
 
 %% Discrete plots
 % The Discrete peroforms worse for small lenses, we remove lens 1 and 4
-lens_vec = [7 14 30 60 90 180 364];
+lens_vec = [7 14 30 90];
 sdr_mat = results.mean_sdr_mat(:,3:end,3);
 std_sdr_mat = results.std_sdr_mat(:,3:end,3);
 leaf_sdr_mat = results.leaf_mean_sdr(:,3:end,3);
@@ -190,7 +190,7 @@ xlabel('Lens size (days)')
 subplot(5,4,2)
 errorbar(lens_vec, leaf_sdr_mat(1,:),leaf_std_mat(1,:))
 
-title({'SG-solar Discrete Deriv Analysis, Lens vs Res';...
+title({'SG2-solar Discrete Deriv Analysis, Lens vs Res';...
     'Leaf SDR'})
 %title('leaf SDR')
 
@@ -252,3 +252,25 @@ subplot(5,4,19)
 errorbar(lens_vec, two_branch_sdr_mat(5,:),two_branch_std_mat(5,:))
 subplot(5,4,20)
 errorbar(lens_vec, three_branch_sdr_mat(5,:), three_branch_std_mat(5,:))
+
+
+%% Plot Only one plot of SDR vs Resolution
+lens_vec = [364];
+res_vec = [1 5 15 30 60];
+sdr_mat = results.mean_sdr_mat(:,end,3);
+std_sdr_mat = results.std_sdr_mat(:,end,3);
+leaf_sdr_mat = results.leaf_mean_sdr(:,end,3);
+leaf_std_mat = results.leaf_std_sdr(:,end,3);
+two_branch_sdr_mat = results.two_branch_mean_sdr(:,end,3);
+two_branch_std_mat = results.two_branch_std_sdr(:,end,3);
+three_branch_sdr_mat = results.three_branch_mean_sdr(:,end,3);
+three_branch_std_mat = results.three_branch_std_sdr(:,end,3);
+
+figure(1)
+plot(res_vec,sdr_mat, '--s', res_vec, leaf_sdr_mat, '-.o', ...
+    res_vec, two_branch_sdr_mat, ':d', res_vec, three_branch_sdr_mat,...
+    'x','LineWidth', 1.5) 
+legend('SDR', 'leaf node SDR', 'two branch SDR', 'three branch SDR')
+xlabel('Downsampling resolution (mins)')
+ylabel('SDR (%)')
+

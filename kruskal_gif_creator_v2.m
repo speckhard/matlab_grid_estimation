@@ -1,4 +1,4 @@
-function weighted_matrix_of_connectivity = kruskal(MI_matrix, true_branches)
+function weighted_matrix_of_connectivity = kruskal(MI_matrix, true_branches, xpos, ypos)
 
 % weighted_matrix_of_connectivity = kruskal(MI_matrix)
 % 
@@ -93,27 +93,35 @@ while number_of_branches < (number_of_buses - 1)
     MI_matrix(x,y) = -10E8;
     
     B = graph(weighted_matrix_of_connectivity);
-    h = plot(B,'Layout','force');
+    h = plot(B, 'NodeLabel', [],'XData', xpos, 'YData', ypos, 'Marker', 'o', 'MarkerSize', 9, 'LineWidth',3.0);% 'Layout','force');
     if ((ismember([x,y], ...
-            true_branches,'rows')) || (ismember([x,y], true_branches...
+            true_branches,'rows')) || (ismember([y,x], true_branches...
             ,'rows')) ) ~= 1
         wrong_branch = wrong_branch + 2;
         wrong_branch_array(wrong_branch-1:wrong_branch) = [x,y];
         highlight(h,wrong_branch_array,'EdgeColor','r','LineWidth',3.5);
     end
-    
-    set(gca,'fontsize',14);
+    set(gca,'visible','off')
+    set(gca,'XtickLabel',[],'YtickLabel',[]);
+    for i=1:length(h.XData)
+        text(h.XData(i)+0.05,h.YData(i),num2str(i),'fontsize',18);
+    end
+    %set(gca,'fontsize',14);
 %         ylim([-1 1]);
 %     xlim([0 2*pi]);
     grid on;
- 
+    if t < 30
+        savefig(['/Users/Dboy/Documents/Stanny/Rajagopal/github_scripts/gif/MVurban_dsicrete', int2str(t)])
+        %print(['/gif/MVurban_dsicrete' + int2str(t)], '-depsc')
+        %print('MVurbandiscrete_25', '-depsc')
+    end
     % gif utilities
     set(gcf,'color','w'); % set figure background to white
     drawnow;
     frame = getframe(1);
     im = frame2im(frame);
     [imind,cm] = rgb2ind(im,256);
-    outfile = 'kruskal_v1.gif';
+    outfile = 'kruskal_mvUrban_discrete2.gif';
  
     % On the first loop, create the file. In subsequent loops, append.
     if t==1

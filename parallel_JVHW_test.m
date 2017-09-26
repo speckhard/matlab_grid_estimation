@@ -31,8 +31,8 @@ data_limits = 'A1..B51';
 %     0,0, data_limits);
 true_branch_data = csvread('/afs/ir.stanford.edu/users/d/t/dts/Documents/Rajagopal/Sandia Data/SG1_true_branch_data.csv',...
     0,0, data_limits);
-true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
-    0,0, data_limits);
+% true_branch_data = csvread('/Users/Dboy/Downloads/SG1_true_branch_data.csv',...
+%     0,0, data_limits);
 %true_branch_data = squeeze(mpc_base.branch(2:end,1:2)-1);
 % %% Remove redundant nodes from the dataset.
 % collapse_data = @collapse_redundant_data;

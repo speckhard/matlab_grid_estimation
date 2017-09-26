@@ -21,6 +21,7 @@ function [sdr_percent, estimated_node_pairs, mutual_information_matrix]...
 % between nodes heatmap.
 % - num bits is the number of bits to which to discretize the data. 
 
+
 % Ouputs:
 % - sdr_percent is the successful detection rate percentage of algorithm. 
 % - estimated_node_pairs is the the list of nodes the algorithm estimates
@@ -29,13 +30,13 @@ function [sdr_percent, estimated_node_pairs, mutual_information_matrix]...
 % between nodes using the method specifid in MI_flag. The matrix is size
 % (num nodes, num nodes). 
 
+
 %% Take the derivative of the data if deriv flag set.
 if strcmp(deriv_flag, 'deriv')
     disp('taking deriv of data')
     take_derivative = @consider_derivative;
     Node_Volt_Matrix = take_derivative(Node_Volt_Matrix);
 end
-
 
 %% Digitize the input if num_bits flag set. 
 if strcmp(num_bits,'no discretization') ~= 1

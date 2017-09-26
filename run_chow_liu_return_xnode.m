@@ -124,9 +124,21 @@ else
 end
 
 %% Find Min Span Tree using Kruskal.m
+%     G1 = graph(true_branch_pairs(:,1),true_branch_pairs(:,2));
+%     
+%     % the default nodelables are too small to read in the 123 node grid
+%     % we erase them and add them again with font size 7.
+%     % This is a workaround for the lack of nodelabel.fontsize obj property
+%     % in node graphs in matlab.
+% %     h = plot(G, 'NodeLabel', [], 'Layout', 'force', 'Marker', 'o', 'MarkerSize', 7);
+%     h1 = plot(G1,  'NodeLabel', [],'Marker', 'o', 'MarkerSize', 7);
+% 
+% xpos = h1.XData;
+% ypos = h1.YData;
+
 tic
-find_min_span_tree = @kruskal; %@kruskal_gif_creator_v2;
-%mat_of_connectivity = find_min_span_tree(mutual_information_matrix, true_branch_pairs);
+find_min_span_tree = @kruskal; %@kruskal_gif_creator_v2 % @kruskal; %@kruskal_gif_creator_v2;
+%mat_of_connectivity = find_min_span_tree(mutual_information_matrix, true_branch_pairs, xpos, ypos);
 mat_of_connectivity = find_min_span_tree(mutual_information_matrix);
 
 disp('time required to run Kruskal')
@@ -154,16 +166,16 @@ find_sdr = @findSDR;
 sdr_percent = SDR;
 
 %% Find the x node SDRs
-leaf_node_SDR = 50;
-two_branch_node_SDR = 50;
-three_branch_node_SDR = 50;
-% x_SDR = @x_node_SDR;
+% leaf_node_SDR = 50;
+% two_branch_node_SDR = 50;
+% three_branch_node_SDR = 50;
+x_SDR = @x_node_SDR;
 % % disp('size of mi matrix')
 % % disp(size(mutual_information_matrix))
-% leaf_node_SDR = x_SDR(mutual_information_matrix, true_branch_pairs, 1);
-% two_branch_node_SDR = x_SDR(mutual_information_matrix, ...
-%     true_branch_pairs, 2);
-% three_branch_node_SDR = x_SDR(mutual_information_matrix, ...
-%     true_branch_pairs, 3);
+leaf_node_SDR = x_SDR(mutual_information_matrix, true_branch_pairs, 1);
+two_branch_node_SDR = x_SDR(mutual_information_matrix, ...
+    true_branch_pairs, 2);
+three_branch_node_SDR = x_SDR(mutual_information_matrix, ...
+    true_branch_pairs, 3);
 
 end
