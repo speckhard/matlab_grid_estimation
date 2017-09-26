@@ -14,6 +14,8 @@ The 'production' folder contains program that are meant to be shared and used by
 
 The 'gif_files' folder contains gif files created for different data-sets to help visualize how the algorithm performs on different data-sets.
 
+The 'plotting_scripts' folder contains scripts to plot data from different data-sets, sampling techniques, mutual information estimation techniques, etc...
+
 For further references please see:
 Distributed Energy Resources Topology Identification via Graphical Modeling by Dr. Yang, Dr. Liao and Prof. Rajagopal
 <http://ieeexplore.ieee.org/abstract/document/7744625/>.
