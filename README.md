@@ -1,13 +1,7 @@
 # Rajagopal_Grid_Estimation
-Scripts to evaluate different algorithms for grid estimation
+The following github repository is meant to include Matlab programs to reproduce and extend results of grid topology estimation using the Chow-Liu algorithm for different mutual information computational techniques. The programs are meant to extend and speed up computation experiments made in the NAPS paper by Yizheng and Dr. Weng <http://ieeexplore.ieee.org/abstract/document/7335248/>
 
-The following scripts are to reproduce results from the Chow-Liu algorithm in the NAPS paper by Yizheng and Dr. Weng
+Author: DTS@stanford.edu , speckharddt@gmail.com
+Date: September 25th, 2017
 
-mutual_information_compututation_10_7_16
-This script is the main script to compute the graph of the estimated grid topology
 
-cycle_check_start.m
-This script determines which node out of a potential branch that we should begin searching for a cycle if this branch is created
-
-cycle_check.m
-This script checks to see if adding a branch will create a cycle in our graph. 
